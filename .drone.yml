@@ -1,0 +1,74 @@
+---
+
+helm_image: &helm_image
+  image: lowess/helm:v2.14.2
+
+cr_image: &cr_image
+  image: lowess/chart-releaser:v0.2.3
+
+cr_env: &cr_env
+  environment:
+    CR_OWNER: Lowess
+    CR_CHARTS_REPO: https://lowess.github.io/helm-charts
+    CR_GIT_REPO: helm-charts
+    CR_PACKAGE_PATH: .cr-release-packages
+    CR_INDEX_PATH: .cr-index
+    CR_TOKEN:
+      from_secret: github_token
+
+kind: pipeline
+name: helm-release
+
+steps:
+  - name: git_conf
+    image: plugins/gh-pages
+    commands:
+      - git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+      - git config --global user.name "Drone CI"
+      - git config --list
+
+  - name: helm_lint
+    <<: *helm_image
+    commands:
+      - helm lint charts/*
+    when:
+      event: push
+
+  - name: helm_package
+    <<: *helm_image
+    <<: *cr_env
+    commands:
+      - mkdir -p $CR_PACKAGE_PATH
+      - helm package charts/* --destination $CR_PACKAGE_PATH
+    when:
+      event: push
+
+  # - name: release_charts
+  #   <<: *cr_image
+  #   <<: *cr_env
+  #   commands:
+  #     - cr upload
+  #   when:
+  #     event: push
+
+  - name: generate_index
+    <<: *cr_image
+    <<: *cr_env
+    commands:
+      - mkdir -p $CR_INDEX_PATH
+      - cr index
+      - cat $CR_INDEX_PATH/index.yaml
+    when:
+      event: push
+
+  - name: publish_index
+    image: plugins/gh-pages
+    environment:
+      GIT_AUTHOR_NAME: "Drone CI"
+    settings:
+      username: Lowess
+      ssh_key:
+        from_secret: github_ssh_key
+      pages_directory: .cr-index
+    when:
+      event: push

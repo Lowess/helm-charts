@@ -1,0 +1,120 @@
+# Default values for burrow.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: solsson/burrow
+  tag: latest
+  # repository: alpine
+  # tag: 3.7
+
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+burrow:
+  labels: {}
+
+  ## Location where burrow templates will be mounted on the container
+  ##
+  templateDir: /etc/burrow/templates
+
+  ## Configuration subheadings with attributes using camelCase notation
+  ## to populate the burrow.toml configuration file. Please refer to
+  ## https://github.com/linkedin/Burrow/wiki/Configuration
+  ##
+  config:
+    ## Maps to [general] section in burrow.toml
+    general: {}
+
+    ## Maps to [logging] section in burrow.toml
+    logging:
+      level: info
+
+    ## Maps to [zookeeper] section in burrow.toml
+    zookeeper:
+      servers:
+        - zookeeper:2181
+
+    ## Maps to [httpserver] section in burrow.toml
+    httpserver:
+      default:
+        address: ":8000"
+        timeout: 300
+
+    ## Maps to [cluster] section in burrow.toml
+    cluster:
+      nlp_stage:
+        class_name: kafka
+        topicRefresh: 30
+        offsetRefresh: 30
+        servers:
+          - kafka:9092
+
+    consumer:
+      nlp_stage:
+        servers:
+          - kafka:9092
+
+    notifier: {}
+     ## Example notifier for Karrot integration
+     ## https://github.com/Lowess/karrot
+     # karrot:
+     #   className: http
+     #   interval: 10
+     #   threshold: 1
+     #   groupBlacklist: "^.*(console-consumer-|python-kafka-consumer-|DLT).*$"
+     #   groupWhitelist: ".*Verity-Stage$"
+     #   extras: '{ key1="value1", key2="value2" }'
+     #   sendClose: true
+     #   urlOpen: http://karrot.default.svc.cluster.local/burrow
+     #   urlClose: http://karrot.default.svc.cluster.local/burrow
+     #   templateOpen: events.tmpl
+     #   templateClose: events.tmpl
+
+  templates:
+    events.tmpl: |
+      {
+        "Event": {{ jsonencoder . }}
+      }
+
+service:
+  type: NodePort
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: burrow.minikube
+      paths:
+        - /
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
