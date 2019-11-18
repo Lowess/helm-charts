@@ -27,12 +27,12 @@ steps:
       - git config --global user.name "Drone CI"
       - git config --list
 
-  - name: helm_lint
-    <<: *helm_image
-    commands:
-      - helm lint charts/*
-    when:
-      event: push
+  # - name: helm_lint
+  #   <<: *helm_image
+  #   commands:
+  #     - helm lint charts/*
+  #   when:
+  #     event: push
 
   - name: helm_package
     <<: *helm_image
@@ -63,8 +63,6 @@ steps:
 
   - name: publish_index
     image: plugins/gh-pages
-    environment:
-      GIT_AUTHOR_NAME: "Drone CI"
     settings:
       username: Lowess
       ssh_key:

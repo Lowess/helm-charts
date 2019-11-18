@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  burrow:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2019-11-15T12:39:57.961642642Z"
+    description: A Helm chart for Kubernetes
+    digest: 81809ca1743743ede7a18347835663b9df376726a2df6eccb13498ffa6e1646b
+    name: burrow
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/burrow-0.1.0/burrow-0.1.0.tgz
+    version: 0.1.0
+generated: "2019-11-15T12:39:57.870288241Z"
