@@ -7,9 +7,6 @@ replicaCount: 1
 image:
   repository: solsson/burrow
   tag: latest
-  # repository: alpine
-  # tag: 3.7
-
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -30,10 +27,11 @@ burrow:
   config:
     ## Maps to [general] section in burrow.toml
     general: {}
+      # pidfile: burrow.pid
 
     ## Maps to [logging] section in burrow.toml
-    logging:
-      level: info
+    logging: {}
+      # level: info
 
     ## Maps to [zookeeper] section in burrow.toml
     zookeeper:
@@ -47,36 +45,40 @@ burrow:
         timeout: 300
 
     ## Maps to [cluster] section in burrow.toml
-    cluster:
-      nlp_stage:
-        class_name: kafka
-        topicRefresh: 30
-        offsetRefresh: 30
-        servers:
-          - kafka:9092
+    cluster: {}
+      ## cluster configures a Kafka cluster to fetch topic and offset information from.
+      # clusterA:
+      #   className: kafka
+      #   topicRefresh: 30
+      #   offsetRefresh: 10
+      #   servers:
+      #     - kafka.clusterA.example.com:9092
 
-    consumer:
-      nlp_stage:
-        servers:
-          - kafka:9092
+    consumer: {}
+      ## consumer configures a single repository to retrieve consumer group offsets
+      ## and information from.
+      # clusterA:
+      #   servers:
+      #     - kafka.clusterA.example.com:9092
 
     notifier: {}
-     ## Example notifier for Karrot integration
-     ## https://github.com/Lowess/karrot
-     # karrot:
-     #   className: http
-     #   interval: 10
-     #   threshold: 1
-     #   groupBlacklist: "^.*(console-consumer-|python-kafka-consumer-|DLT).*$"
-     #   groupWhitelist: ".*Verity-Stage$"
-     #   extras: '{ key1="value1", key2="value2" }'
-     #   sendClose: true
-     #   urlOpen: http://karrot.default.svc.cluster.local/burrow
-     #   urlClose: http://karrot.default.svc.cluster.local/burrow
-     #   templateOpen: events.tmpl
-     #   templateClose: events.tmpl
+      ## Example notifier for Karrot integration
+      ## https://github.com/Lowess/karrot
+      # karrot:
+      #   className: http
+      #   interval: 10
+      #   threshold: 1
+      #   groupBlacklist: "^.*(console-consumer-|python-kafka-consumer-|DLT).*$"
+      #   groupWhitelist: ".*Verity-Stage$"
+      #   extras: '{ key1="value1", key2="value2" }'
+      #   sendClose: true
+      #   urlOpen: http://karrot.default.svc.cluster.local/burrow
+      #   urlClose: http://karrot.default.svc.cluster.local/burrow
+      #   templateOpen: events.tmpl
+      #   templateClose: events.tmpl
 
   templates:
+    ## templates define template files used to format the payload sent by notifiers.
     events.tmpl: |
       {
         "Event": {{ jsonencoder . }}

@@ -16,40 +16,41 @@ cr_env: &cr_env
     CR_TOKEN:
       from_secret: github_token
 
+when_promoted: &when_promoted
+  when:
+    event:
+      - promote
+    target:
+      - production
+
 kind: pipeline
 name: helm-release
-
 steps:
-  - name: git_conf
-    image: plugins/gh-pages
-    commands:
-      - git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-      - git config --global user.name "Drone CI"
-      - git config --list
-
   - name: helm_lint
     <<: *helm_image
     commands:
       - helm lint charts/*
-    when:
-      event: push
 
   - name: helm_package
     <<: *helm_image
     <<: *cr_env
+    environment:
+      CHARTS: $CHARTS
     commands:
       - mkdir -p $CR_PACKAGE_PATH
-      - helm package charts/* --destination $CR_PACKAGE_PATH
-    when:
-      event: push
+      - helm repo add lowess-helm-charts https://lowess.github.io/helm-charts/
+      - for CHART in ${CHARTS//,/ }; do
+      -   helm dependency update charts/$CHART
+      -   helm package charts/$CHART --destination $CR_PACKAGE_PATH;
+      - done
+    <<: *when_promoted
 
-  # - name: release_charts
-  #   <<: *cr_image
-  #   <<: *cr_env
-  #   commands:
-  #     - cr upload
-  #   when:
-  #     event: push
+  - name: release_charts
+    <<: *cr_image
+    <<: *cr_env
+    commands:
+      - cr upload
+    <<: *when_promoted
 
   - name: generate_index
     <<: *cr_image
@@ -58,17 +59,27 @@ steps:
       - mkdir -p $CR_INDEX_PATH
       - cr index
       - cat $CR_INDEX_PATH/index.yaml
-    when:
-      event: push
+    <<: *when_promoted
 
   - name: publish_index
     image: plugins/gh-pages
     environment:
-      GIT_AUTHOR_NAME: "Drone CI"
+      DRONE_REMOTE_URL: git@github.com:Lowess/helm-charts.git
     settings:
       username: Lowess
       ssh_key:
         from_secret: github_ssh_key
       pages_directory: .cr-index
-    when:
-      event: push
+    <<: *when_promoted
+
+  - name: display_urls
+    image: lowess/drone-tabulate
+    <<: *cr_env
+    settings:
+      headers:
+        - Name
+        - URLs
+      rows:
+        -
+          - Helm Repo
+          - https://lowess.github.io/helm-charts

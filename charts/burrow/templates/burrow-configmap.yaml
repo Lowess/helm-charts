@@ -9,8 +9,15 @@ data:
     [general]
     pidfile={{ .Values.burrow.config.general.pidfile | default "burrow.pid" | quote }}
 
+    [logging]
+    level={{ .Values.burrow.config.logging.level | default "info" | quote }}
+
+    [httpserver.default]
+    address={{ .Values.burrow.config.httpserver.default.address | default ":8000" | quote }}
+    timeout={{ .Values.burrow.config.httpserver.default.timeout | default 300 }}
+
     [zookeeper]
-    servers=[{{ join "," .Values.burrow.config.zookeeper.servers | quote }}]
+    servers={{ include "burrow.servers" .Values.burrow.config.zookeeper.servers }}
     timeout={{ .Values.burrow.config.zookeeper.timout | default 6 }}
     root-path={{ .Values.burrow.config.zookeeper.rootPath | default "/burrow" | quote }}
 
@@ -18,28 +25,25 @@ data:
     {{ range $key, $value := .Values.burrow.config.cluster }}
     [cluster.{{ $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
-    servers=[{{ join "," $value.servers | quote }}]
-    topic-refresh={{ $value.topicRefresh | default 30 }}
-    offset-refresh={{ $value.offsetRefresh | default 30 }}
-    {{- end }}
+    servers={{ include "burrow.servers" $value.servers }}
+    topic-refresh={{ $value.topicRefresh | default 60 }}
+    offset-refresh={{ $value.offsetRefresh | default 10 }}
+    {{ end }}
 
-    {{ range $key, $value := .Values.burrow.config.consumer -}}
+    {{- range $key, $value := .Values.burrow.config.consumer }}
     [consumer.{{ $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     cluster="{{ $key }}"
-    servers=[{{ join "," $value.servers | quote }}]
+    servers={{ include "burrow.servers" $value.servers }}
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
-    group-whitelist={{ $value.groupwhitelist | default ".*" | quote }}
-    {{- end }}
+    group-whitelist={{ $value.groupWhitelist | default ".*" | quote }}
+    {{ end }}
 
-    [httpserver.default]
-    address={{ .Values.burrow.config.httpserver.default.address | default ":8000" | quote }}
-
-    {{ range $key, $value := .Values.burrow.config.notifier -}}
+    {{- range $key, $value := .Values.burrow.config.notifier }}
     [notifier.{{ $key }}]
-    class-name={{ $value.className | quote }}
-    interval={{ $value.interval | default 10 }}
-    threshold={{ $value.threshold | default 1 }}
+    class-name={{ $value.className | default "http" | quote }}
+    interval={{ $value.interval | default 60 }}
+    threshold={{ $value.threshold | default 2 }}
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
     group-whitelist={{ $value.groupWhitelist | default "^.*$" | quote }}
     {{- if $value.extras }}
@@ -51,6 +55,3 @@ data:
     template-open={{  printf "%s/%s" $root.Values.burrow.templateDir $value.templateOpen | quote }}
     template-close={{  printf "%s/%s" $root.Values.burrow.templateDir $value.templateClose | quote }}
     {{- end }}
-
-    [logging]
-    level={{ .Values.burrow.config.logging.level | default "info" | quote }}

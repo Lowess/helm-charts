@@ -6,4 +6,7 @@
 # Chart dependencies
 **/charts/*.tgz
 
+.cr-index/
+.cr-release-packages/
+
 # End of https://www.gitignore.io/api/helm
