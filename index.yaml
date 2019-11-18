@@ -1,5 +1,15 @@
 apiVersion: v1
 entries:
+  app:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2019-11-18T07:40:31.794433975Z"
+    description: A Helm chart for Kubernetes
+    digest: 034007dcb623412c1a33ac273791cfd2a1be9064e2f4d49aeecbb0757349634b
+    name: app
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/app-0.1.0/app-0.1.0.tgz
+    version: 0.1.0
   burrow:
   - apiVersion: v1
     appVersion: "1.0"
