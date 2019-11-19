@@ -61,18 +61,21 @@ Parameter | Description | Default
 `burrow.config.zookeeper.rootPath` | A full path to the znode that Burrow is allow to write under. The path will be created if it does not already exist | `/burrow`
 `burrow.config.httpserver.default.address` | Specifies what the server should listen on | `:8000`
 `burrow.config.httpserver.default.timeout` | The timeout and keepalive setting for connections, in seconds | `300`
-`burrow.config.cluster.<myclustername>` | The `<myclustername>` part is the name by which this cluster will be referred to in other parts of the configuration, as well as in HTTP requests and notifications. You may configure as many cluster sections as you want (and Burrow is efficient at handling multiple Kafka clusters). Note that the cluster configuration only retrieves the topic list and cluster offsets. | `{}`
+`burrow.config.cluster.<myclustername>` | The `<myclustername>` part is the name by which this cluster will be referred to in other parts of the configuration (if not overriden by `burrow.config.cluster.<myclustername>.clusterName`), as well as in HTTP requests and notifications. You may configure as many cluster sections as you want (and Burrow is efficient at handling multiple Kafka clusters). Note that the cluster configuration only retrieves the topic list and cluster offsets. | `{}`
+`burrow.config.cluster.<myclustername>.clusterName` | Overrides the cluster name which default to the map key `<myclustername>` |
+
 `burrow.config.cluster.<myclustername>.className` | This is the name of the cluster module type. The only available class is `kafka` | `kafka`
 `burrow.config.cluster.<myclustername>.servers` | A list of strings in the form "hostname:port" that point to the servers in the Kafka cluster. At least one is required |
 `burrow.config.cluster.<myclustername>.topicRefresh` | How often to refresh the list of all topics in the cluster, in seconds | `60`
 `burrow.config.cluster.<myclustername>.offsetRefresh` | How often to refresh the broker offset for each partition, in seconds | `10`
+`burrow.config.consumer.<myclustername>.clusterName` | If `burrow.config.cluster.<myclustername>.clusterName` is set then this setting must be set to the same value |
 `burrow.config.consumer.<myclustername>.className` | This is the name of the cluster module type. The available classes are: `kafka` or `kafka_zk` | `kafka`
 `burrow.config.consumer.<myclustername>.servers` | A list of strings in the form "hostname:port" that point to the servers in the Kafka cluster. At least one is required |
 `burrow.config.consumer.<myclustername>.groupWhitelist` | If specified, only send offsets for groups that match this regular expression | `.*`
 `burrow.config.consumer.<myclustername>.groupBlacklist` | If specified, only send offsets for groups that DO NOT match this regular expression. This is processed after the whitelist (if specified) | `^.*(console-consumer-|python-kafka-consumer-).*`
 `burrow.config.notifier.<mynotifier>.className` | This is the name of the cluster module type. The available classes are: `http` or `email` | `http`
 `burrow.config.notifier.<mynotifier>.interval` | The number of seconds to wait between sending notifications for a single group | `60`
-`burrow.config.notifier.<mynotifier>.threshold` | The minimum group status to send out notifications for (refer to [StatusConstant](https://godoc.org/github.com/linkedin/Burrow/core/protocol#StatusConstant) for values). | `2`
+`burrow.config.notifier.<mynotifier>.threshold` | The minimum group status to send out notifications for (refer to [StatusConstant](https://godoc.org/github.com/linkedin/Burrow/core/protocol#StatusConstant) for values). | `1`
 `burrow.config.notifier.<mynotifier>.groupBlacklist` | If specified, only send notifications for groups that DO NOT match this regular expression. This is processed after the whitelist (if specified) | `^.*(console-consumer-|python-kafka-consumer-).*$`
 `burrow.config.notifier.<mynotifier>.groupWhitelist` | If specified, only send notifications for groups that match this regular expression | `^.*$`
 `burrow.config.notifier.<mynotifier>.extras` | A string representation of a JSON object that will be available when compiling the template for the message to send | `'{}'`

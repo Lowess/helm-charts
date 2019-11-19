@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: lowess/karrot
-  tag: v0.0.1
+  tag: v1.0.0
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -16,6 +16,8 @@ fullnameOverride: ""
 service:
   type: NodePort
   port: 80
+  annotations: {}
+    # prometheus.io/scrape: "true"
 
 ingress:
   enabled: true
@@ -44,6 +46,12 @@ resources: {}
   #   memory: 128Mi
 
 karrot:
+  ## Annotations to be added to Karrot pods
+  ##
+  podAnnotations: {}
+
+  ## Environment variables to be added to Karrot pods
+  ##
   env:
     AWS_DEFAULT_REGION: us-east-1
 

@@ -9,7 +9,7 @@
 
 $ helm repo add lowess-helm https://lowess.github.io/helm-charts
 
-# Install burrow
+# Install karrot
 
 $ helm install lowess-helm/karrot
 ```

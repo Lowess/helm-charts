@@ -23,7 +23,7 @@ data:
 
     {{- $root := . }}
     {{ range $key, $value := .Values.burrow.config.cluster }}
-    [cluster.{{ $key }}]
+    [cluster.{{ $value.clusterName | default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     servers={{ include "burrow.servers" $value.servers }}
     topic-refresh={{ $value.topicRefresh | default 60 }}
@@ -31,9 +31,9 @@ data:
     {{ end }}
 
     {{- range $key, $value := .Values.burrow.config.consumer }}
-    [consumer.{{ $key }}]
+    [consumer.{{ $value.clusterName | default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
-    cluster="{{ $key }}"
+    cluster="{{ $value.clusterName | default $key }}"
     servers={{ include "burrow.servers" $value.servers }}
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
     group-whitelist={{ $value.groupWhitelist | default ".*" | quote }}
@@ -43,7 +43,7 @@ data:
     [notifier.{{ $key }}]
     class-name={{ $value.className | default "http" | quote }}
     interval={{ $value.interval | default 60 }}
-    threshold={{ $value.threshold | default 2 }}
+    threshold={{ $value.threshold | default 1 }}
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
     group-whitelist={{ $value.groupWhitelist | default "^.*$" | quote }}
     {{- if $value.extras }}

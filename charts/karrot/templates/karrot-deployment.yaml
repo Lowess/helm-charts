@@ -12,6 +12,10 @@ spec:
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
+  {{- if .Values.karrot.podAnnotations }}
+      annotations:
+{{ toYaml .Values.karrot.podAnnotations | indent 8 }}
+  {{- end }}
       labels:
         app.kubernetes.io/name: {{ include "karrot.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -31,7 +35,7 @@ spec:
               value: prod
             {{- range $key, $value := .Values.karrot.env }}
             - name: {{ $key }}
-              value: {{ $value }}
+              value: {{ $value | quote }}
             {{- end }}
           args:
             - "karrot:create_app()"
