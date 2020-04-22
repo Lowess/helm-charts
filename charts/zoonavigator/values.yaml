@@ -1,0 +1,180 @@
+# Default values for zoonavigator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: elkozmon/zoonavigator
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+zoonavigator:
+  ## Annotations to be added to Zoonavigator pods
+  ##
+  podAnnotations: {}
+
+  ## Environment variables to be added to Zoonavigator pods
+  ##
+  env:
+    ## -- Server settings
+    ## env.HTTP_PORT -- Tells the HTTP server which port to bind to. To disable HTTP set this variable to disabled.
+    HTTP_PORT: 9000
+
+    ## env.HTTPS_PORT -- If set, HTTPS server will bind to this port.
+    # HTTPS_PORT:
+
+    ## env.SSL_KEYSTORE_PATH -- The path to the keystore containing the private key and certificate,
+    ## if not provided generates a keystore for you.
+    # SSL_KEYSTORE_PATH:
+
+    ## env.SSL_KEYSTORE_PASSWORD -- The password to the keystore, defaults to a blank password.
+    # SSL_KEYSTORE_PASSWORD:
+
+    ## env.SSL_KEYSTORE_TYPE -- The key store type. default: JKS
+    # SSL_KEYSTORE_TYPE:
+
+    ## env.SESSION_TIMEOUT_MILLIS -- Sets session inactivity timeout for users. This value is in milliseconds (default: 900000)
+    # SESSION_TIMEOUT_MILLIS:
+
+    ## env.SECRET_KEY -- Secret key for Play Framework - used for signing session cookies and CSRF tokens.
+    ## Defaults to 64 random characters generated from /dev/urandom.
+    # SECRET_KEY:
+
+    ## env.AUTO_CONNECT_CONNECTION_STRING -- If set, ZooNavigator will use this value as a default connection string and skip the connect form
+    ## automatically connecting to listed ZooKeeper servers.
+    # AUTO_CONNECT_CONNECTION_STRING:
+
+    ## env.AUTO_CONNECT_AUTH_INFO -- In addition to presetting connection string as explained above,
+    ## you can also set Auth info which ZooNavigator will use to authenticate with
+    ## ZooKeeper during the auto-connect. Use semicolon (;) to separate multiple entries.
+    # AUTO_CONNECT_AUTH_INFO:
+
+    ## -- Java settings
+
+    ## env.JAVA_OPTS -- Custom Java arguments.
+    # JAVA_OPTS:
+
+    ## env.JAVA_XMS -- Sets initial Java heap size. This value is in bytes if no unit is specified.
+    # JAVA_XMS:
+
+    ## env.JAVA_XMX -- Sets maximum Java heap size. This value is in bytes if no unit is specified.
+    # JAVA_XMX:
+
+    ## env.JAVA_JAAS_LOGIN_CONFIG -- Path to JAAS login configuration file to use.
+    # JAVA_JAAS_LOGIN_CONFIG:
+
+    ## env.JAVA_KRB5_DEBUG -- If set to true, enables debugging mode and detailed logging for Kerberos.
+    # JAVA_KRB5_DEBUG:
+
+    ## env.JAVA_KRB5_REALM -- Sets the default Kerberos realm.
+    # JAVA_KRB5_REALM:
+
+    ## env.JAVA_KRB5_KDC -- Sets the default Kerberos KDC.
+    # JAVA_KRB5_KDC:
+
+    ## -- Zookeeper Client settings
+
+    ## env.ZK_CLIENT_TIMEOUT_MILLIS -- Sets inactivity timeout for ZooKeeper client. If user doesn’t make any
+    ## request during this period ZooKeeper connection will be closed and recreated
+    ## for the future request if any. Note that user does not get logged out unlike in event of session timeout.
+    ## This value is in milliseconds (default: 5000)
+    # ZK_CLIENT_TIMEOUT_MILLIS:
+
+    ## env.ZK_CONNECT_TIMEOUT_MILLIS -- Sets timeout for attempt to establish connection with ZooKeeper.
+    ## This value is in milliseconds (default 5000).
+    # ZK_CONNECT_TIMEOUT_MILLIS:
+
+    ## env.ZK_SASL_CLIENT -- Set the value to false to disable SASL authentication (default: true)
+    # ZK_SASL_CLIENT:
+
+    ## env.ZK_SASL_CLIENT_CONFIG -- Specifies the context key in the JAAS login file (default: Client)
+    # ZK_SASL_CLIENT_CONFIG:
+
+    ## env.ZK_SASL_CLIENT_USERNAME -- Specifies the primary part of the server principal (default: zookeeper)
+    # ZK_SASL_CLIENT_USERNAME:
+
+    ## env.ZK_SERVER_REALM -- Realm part of the server principal.
+    ## By default it is the client principal realm.
+    # ZK_SERVER_REALM:
+
+    ## env.ZK_CLIENT_SECURE -- If you want to connect to the server secure client port,
+    ## you need to set this property to true. This will connect to server using SSL with specified credentials.
+    ## Note that it requires using the Netty client.
+    # ZK_CLIENT_SECURE:
+
+    ## env.ZK_CLIENT_CNXN_SOCKET -- Specifies which ClientCnxnSocket to be used. If you want to connect to server’s secure client port,
+    ## you need to set this property to :org.apache.zookeeper.ClientCnxnSocketNetty.
+    ## default: org.apache.zookeeper.ClientCnxnSocketNIO
+    # ZK_CLIENT_CNXN_SOCKET:
+
+    ## env.ZK_SSL_KEYSTORE_PATH -- Specifies the file path to a JKS containing the local credentials to be used for SSL connections.
+    # ZK_SSL_KEYSTORE_PATH:
+
+    ## env.ZK_SSL_KEYSTORE_PASSWORD -- Specifies the password to a JKS containing the local credentials to be used for SSL connections.
+    # ZK_SSL_KEYSTORE_PASSWORD:
+
+    ## env.ZK_SSL_TRUSTSTORE_PATH -- Specifies the file path to a JKS containing the remote credentials to be used for SSL connections.
+    # ZK_SSL_TRUSTSTORE_PATH:
+
+    ## env.ZK_SSL_TRUSTSTORE_PASSWORD -- Specifies the password to a JKS containing the remote credentials to be used for SSL connections.
+    # ZK_SSL_TRUSTSTORE_PASSWORD:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 9000
+  annotations: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: zoonavigator.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
