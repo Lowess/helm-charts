@@ -31,4 +31,14 @@ entries:
     urls:
     - https://github.com/Lowess/helm-charts/releases/download/karrot-0.1.0/karrot-0.1.0.tgz
     version: 0.1.0
+  zoonavigator:
+  - apiVersion: v2
+    appVersion: 0.8.0
+    created: "2020-04-22T12:44:03.701718943Z"
+    description: Helm chart for Zoonavigator
+    digest: b2064d571e6b59d6d1d8abd0a565db5044697b3d3021c20fd0d375b9a7676dc5
+    name: zoonavigator
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/zoonavigator-0.1.0/zoonavigator-0.1.0.tgz
+    version: 0.1.0
 generated: "2019-11-18T07:35:43.888372861Z"
