@@ -6,6 +6,7 @@ replicaCount: 1
 
 image:
   repository: elkozmon/zoonavigator
+  tag: v0.8.0
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
