@@ -43,6 +43,16 @@ entries:
   karrot:
   - apiVersion: v1
     appVersion: 1.0.0
+    created: "2020-06-10T10:52:33.342049133Z"
+    description: A Helm chart for Kubernetes
+    digest: baf26dd5857276730ac09b206bcaceb8420a83df5191cfb09f7974d16121a4c3
+    icon: https://i.pinimg.com/originals/a7/49/87/a74987d160e204e4120ad87c1b683dbd.png
+    name: karrot
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/karrot-0.1.2/karrot-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: 1.0.0
     created: "2020-06-10T09:03:24.119485931Z"
     description: A Helm chart for Kubernetes
     digest: fe2000c011fb418988937ea98a4de854edd8a621d9fb45edfbaa7a917b557a00
