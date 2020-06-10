@@ -37,6 +37,7 @@ data:
     servers={{ include "burrow.servers" $value.servers }}
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
     group-whitelist={{ $value.groupWhitelist | default ".*" | quote }}
+    start-latest={{ $value.startLatest | default false }}
     {{ end }}
 
     {{- range $key, $value := .Values.burrow.config.notifier }}
