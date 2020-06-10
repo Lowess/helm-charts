@@ -45,7 +45,7 @@ data:
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
     group-whitelist={{ $value.groupWhitelist | default ".*" | quote }}
     start-latest={{ $value.startLatest | default false }}
-    client-profile={{ with $value.clientProfile }}{{ . }}{{ end }}
+    client-profile={{ with $value.clientProfile }}{{ . | quote }}{{ end }}
 
     {{ end }}
 
