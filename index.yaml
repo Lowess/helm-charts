@@ -13,6 +13,16 @@ entries:
   burrow:
   - apiVersion: v1
     appVersion: "1.0"
+    created: "2020-06-10T10:51:32.466282651Z"
+    description: A Helm chart for Kubernetes
+    digest: f8f9e040e38132520bfd0751b2b72989260855e651d84ff70e0be097ee7b071b
+    icon: https://media.licdn.com/dms/image/C4D0BAQEj-Fx1qtIAKQ/company-logo_200_200/0?e=2159024400&v=beta&t=90Cva_S5-k44uPf_P11ZdHQ6WnUCjuSrTGQshbTvWVo
+    name: burrow
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/burrow-0.1.2/burrow-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: "1.0"
     created: "2020-06-10T08:57:49.248696391Z"
     description: A Helm chart for Kubernetes
     digest: be34d9a2a1250a3ef04135ff5b45ce9281c65511fdcafeb65fb5ea86d43c9be1
