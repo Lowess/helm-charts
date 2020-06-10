@@ -44,6 +44,12 @@ burrow:
         address: ":8000"
         timeout: 300
 
+    ## Maps to [client-profile] section in burrow.toml
+    clientProfile: {}
+      ## clientProfile configures a Kafka profile to use by Burrow consumer.
+      # main:
+      #   kafkaVersion: 1.1.0
+
     ## Maps to [cluster] section in burrow.toml
     cluster: {}
       ## cluster configures a Kafka cluster to fetch topic and offset information from.
@@ -55,8 +61,8 @@ burrow:
       #     - kafka.clusterA.example.com:9092
 
     consumer: {}
-      ## consumer configures a single repository to retrieve consumer group offsets
-      ## and information from.
+      # consumer configures a single repository to retrieve consumer group offsets
+      # and information from.
       # clusterA:
       #   servers:
       #     - kafka.clusterA.example.com:9092

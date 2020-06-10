@@ -22,6 +22,13 @@ data:
     root-path={{ .Values.burrow.config.zookeeper.rootPath | default "/burrow" | quote }}
 
     {{- $root := . }}
+
+    {{ range $key, $value := .Values.burrow.config.clientProfile }}
+    [client-profile.{{ $key }}]
+    kafka-version={{ $value.kafkaVersion | default "0.8" | quote}}
+    client-id="{{ $value.clientId | default "burrow-lagchecker" }}"
+    {{ end }}
+
     {{ range $key, $value := .Values.burrow.config.cluster }}
     [cluster.{{ $value.clusterName | default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
@@ -38,6 +45,8 @@ data:
     group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
     group-whitelist={{ $value.groupWhitelist | default ".*" | quote }}
     start-latest={{ $value.startLatest | default false }}
+    client-profile={{ with $value.clientProfile }}{{ . }}{{ end }}
+
     {{ end }}
 
     {{- range $key, $value := .Values.burrow.config.notifier }}
