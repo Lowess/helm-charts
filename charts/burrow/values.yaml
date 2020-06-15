@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: solsson/burrow
-  tag: latest
+  repository: ifoodhub/burrow
+  tag: 1.3.3
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
