@@ -2,5 +2,5 @@ apiVersion: v1
 appVersion: "1.3.3"
 description: A Helm chart for Kubernetes
 name: burrow
-version: 0.1.3
+version: 0.1.4
 icon: https://media.licdn.com/dms/image/C4D0BAQEj-Fx1qtIAKQ/company-logo_200_200/0?e=2159024400&v=beta&t=90Cva_S5-k44uPf_P11ZdHQ6WnUCjuSrTGQshbTvWVo
