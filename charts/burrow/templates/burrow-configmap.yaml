@@ -30,7 +30,7 @@ data:
     {{ end }}
 
     {{ range $key, $value := .Values.burrow.config.cluster }}
-    [cluster.{{ $value.clusterName | default $key }}]
+    [cluster.{{ default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     servers={{ include "burrow.servers" $value.servers }}
     topic-refresh={{ $value.topicRefresh | default 60 }}
@@ -38,7 +38,7 @@ data:
     {{ end }}
 
     {{- range $key, $value := .Values.burrow.config.consumer }}
-    [consumer.{{ $value.clusterName | default $key }}]
+    [consumer.{{ default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     cluster="{{ $value.clusterName | default $key }}"
     servers={{ include "burrow.servers" $value.servers }}
