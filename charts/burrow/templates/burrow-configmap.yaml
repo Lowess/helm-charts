@@ -18,7 +18,7 @@ data:
 
     [zookeeper]
     servers={{ include "burrow.servers" .Values.burrow.config.zookeeper.servers }}
-    timeout={{ .Values.burrow.config.zookeeper.timout | default 6 }}
+    timeout={{ .Values.burrow.config.zookeeper.timeout | default 6 }}
     root-path={{ .Values.burrow.config.zookeeper.rootPath | default "/burrow" | quote }}
 
     {{- $root := . }}
