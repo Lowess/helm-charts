@@ -18,7 +18,7 @@ data:
 
     [zookeeper]
     servers={{ include "burrow.servers" .Values.burrow.config.zookeeper.servers }}
-    timeout={{ .Values.burrow.config.zookeeper.timout | default 6 }}
+    timeout={{ .Values.burrow.config.zookeeper.timeout | default 6 }}
     root-path={{ .Values.burrow.config.zookeeper.rootPath | default "/burrow" | quote }}
 
     {{- $root := . }}
@@ -27,10 +27,19 @@ data:
     [client-profile.{{ $key }}]
     kafka-version={{ $value.kafkaVersion | default "0.8" | quote}}
     client-id="{{ $value.clientId | default "burrow-lagchecker" }}"
+    tls="{{ $value.tls | default "burrow-mTLS" }}"
+    {{ end }}
+
+    {{ range $key, $value := .Values.burrow.config.tls }}
+    [tls.{{ $key }}]
+    certfile="{{ $value.certFile | default "/tmp/client_cert.pem" }}"
+    keyfile="{{ $value.keyFile | default "/tmp/private_key.pem" }}"
+    cafile="{{ $value.caFile | default "/tmp/truststore.pem" }}"
+    noverify={{ $value.noverify | default false }}
     {{ end }}
 
     {{ range $key, $value := .Values.burrow.config.cluster }}
-    [cluster.{{ $value.clusterName | default $key }}]
+    [cluster.{{ default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     servers={{ include "burrow.servers" $value.servers }}
     topic-refresh={{ $value.topicRefresh | default 60 }}
@@ -38,7 +47,7 @@ data:
     {{ end }}
 
     {{- range $key, $value := .Values.burrow.config.consumer }}
-    [consumer.{{ $value.clusterName | default $key }}]
+    [consumer.{{ default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     cluster="{{ $value.clusterName | default $key }}"
     servers={{ include "burrow.servers" $value.servers }}
