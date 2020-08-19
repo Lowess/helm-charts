@@ -1,5 +1,5 @@
 dependencies:
   - name: burrow
-    version: 0.1.3
+    version: 0.1.4
     repository: https://lowess.github.io/helm-charts/
     condition: burrow.enabled
