@@ -15,6 +15,12 @@ fullnameOverride: ""
 
 burrow:
   labels: {}
+  annotations: {}
+
+  ## Secret containing configuration environment variables
+  ## For example enviroment variable: BURROW_ZOOKEEPER_SERVERS - will set Zookeeper servers for Burrow
+  ##
+  secretConfig: ""
 
   ## Location where burrow templates will be mounted on the container
   ##

@@ -4,6 +4,10 @@ metadata:
   name: {{ include "burrow.fullname" . }}
   labels:
 {{ include "burrow.labels" . | indent 4 }}
+  {{- with .Values.burrow.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -28,6 +32,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # command: ['sleep', '36000']
+          {{- if .Values.burrow.secretConfig }}
+          envFrom:
+          - secretRef:
+              name: {{ .Values.burrow.secretConfig }}
+          {{- end }}
           volumeMounts:
             - mountPath: /etc/burrow
               name: config
