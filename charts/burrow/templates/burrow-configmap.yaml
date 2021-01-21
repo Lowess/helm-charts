@@ -27,7 +27,7 @@ data:
     [client-profile.{{ $key }}]
     kafka-version={{ $value.kafkaVersion | default "0.8" | quote}}
     client-id="{{ $value.clientId | default "burrow-lagchecker" }}"
-    {{- if .Values.burrow.config.tls }}
+    {{- if $root.Values.burrow.config.tls }}
     tls="{{ $value.tls | default "" }}"
     {{- end }}
     {{ end }}

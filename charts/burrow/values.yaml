@@ -31,6 +31,9 @@ burrow:
   ## https://github.com/linkedin/Burrow/wiki/Configuration
   ##
   config:
+    ## Maps to [tls] section in burrow.toml
+    tls: {}
+
     ## Maps to [general] section in burrow.toml
     general: {}
       # pidfile: burrow.pid
