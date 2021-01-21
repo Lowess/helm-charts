@@ -1,6 +1,6 @@
 dependencies:
 - name: burrow
   repository: https://lowess.github.io/helm-charts/
-  version: 0.1.4
-digest: sha256:b20f7b84454520f8669ae917bfaf051c958d071a7ceea0ea31e1d8d0e3d5118d
-generated: "2020-09-30T01:38:02.009843-07:00"
+  version: 0.1.5
+digest: sha256:e3da3171a1d228ca619184b6435428adcfc04b23880eb37d86f9c7d60ed0e73e
+generated: "2021-01-21T00:07:27.075685-08:00"
