@@ -68,10 +68,10 @@ Parameter | Description | Default
 `burrow.config.cluster.<myclustername>.servers` | A list of strings in the form "hostname:port" that point to the servers in the Kafka cluster. At least one is required |
 `burrow.config.cluster.<myclustername>.topicRefresh` | How often to refresh the list of all topics in the cluster, in seconds | `60`
 `burrow.config.cluster.<myclustername>.offsetRefresh` | How often to refresh the broker offset for each partition, in seconds | `10`
-`burror.config.tls.certFile` | The path to the certificate file to be used (either a client certificate for client connections, or a server certificate for the HTTP server). | /tmp/client_cert.pem
-`burror.config.tls.keyFile` | The path to the key file that matches the certfile. | /tmp/private_key.pem
-`burror.config.tls.caFile` | If specified, it is the path to a bundle of certificates that provide the trusted root certificates for the connection. | /tmp/truststore.pem
-`burror.config.tls.noverify` | If true, do not validate the trust of the certificate sent by the other side of this connection. | false
+`burror.config.tls.<tlsprofile>.certFile` | The path to the certificate file to be used (either a client certificate for client connections, or a server certificate for the HTTP server). | /tmp/client_cert.pem
+`burror.config.tls.<tlsprofile>.keyFile` | The path to the key file that matches the certfile. | /tmp/private_key.pem
+`burror.config.tls.<tlsprofile>.caFile` | If specified, it is the path to a bundle of certificates that provide the trusted root certificates for the connection. | /tmp/truststore.pem
+`burror.config.tls.<tlsprofile>.noverify` | If true, do not validate the trust of the certificate sent by the other side of this connection. | false
 `burrow.config.consumer.<myclustername>.clusterName` | If `burrow.config.cluster.<myclustername>.clusterName` is set then this setting must be set to the same value |
 `burrow.config.consumer.<myclustername>.className` | This is the name of the cluster module type. The available classes are: `kafka` or `kafka_zk` | `kafka`
 `burrow.config.consumer.<myclustername>.servers` | A list of strings in the form "hostname:port" that point to the servers in the Kafka cluster. At least one is required |
