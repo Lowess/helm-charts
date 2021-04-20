@@ -30,6 +30,9 @@ data:
     {{- if $root.Values.burrow.config.tls }}
     tls="{{ $value.tls | default "" }}"
     {{- end }}
+    {{- if $root.Values.burrow.config.sasl }}
+    sasl="{{ $value.sasl | default "" }}"
+    {{- end }}
     {{ end }}
 
     {{ range $key, $value := .Values.burrow.config.tls }}
@@ -38,6 +41,14 @@ data:
     keyfile="{{ $value.keyFile | default "/tmp/private_key.pem" }}"
     cafile="{{ $value.caFile | default "/tmp/truststore.pem" }}"
     noverify={{ $value.noverify | default false }}
+    {{ end }}
+
+    {{ range $key, $value := .Values.burrow.config.sasl }}
+    [sasl.{{ $key }}]
+    username="{{ $value.username | default "burrow" }}"
+    password="{{ $value.password | default "burrow" }}"
+    handshake-first={{ $value.handshake_first | default false }}
+    algorithm="{{ $value.algorithm | default "SCRAM-SHA-512" }}"
     {{ end }}
 
     {{ range $key, $value := .Values.burrow.config.cluster }}
