@@ -34,6 +34,9 @@ burrow:
     ## Maps to [tls] section in burrow.toml
     tls: {}
 
+    ## Maps to [sasl] section in burrow.toml
+    sasl: {}
+
     ## Maps to [general] section in burrow.toml
     general: {}
       # pidfile: burrow.pid
