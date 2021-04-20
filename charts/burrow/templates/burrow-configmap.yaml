@@ -55,6 +55,7 @@ data:
     [cluster.{{ default $key }}]
     class-name={{ $value.className | default "kafka" | quote }}
     servers={{ include "burrow.servers" $value.servers }}
+    client-profile={{ with $value.clientProfile }}{{ . | quote }}{{ end }}
     topic-refresh={{ $value.topicRefresh | default 60 }}
     offset-refresh={{ $value.offsetRefresh | default 10 }}
     {{ end }}
