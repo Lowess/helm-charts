@@ -19,7 +19,13 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/burrow-configmap.yaml") . | sha256sum }}
         checksum/templates: {{ include (print $.Template.BasePath "/burrow-templates-configmap.yaml") . | sha256sum }}
+        {{- with .Values.burrow.podAnnotations }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       labels:
+        {{- with .Values.burrow.podLabels }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         app.kubernetes.io/name: {{ include "burrow.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
