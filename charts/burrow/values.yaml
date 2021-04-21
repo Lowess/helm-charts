@@ -16,6 +16,8 @@ fullnameOverride: ""
 burrow:
   labels: {}
   annotations: {}
+  podLabels: {}
+  podAnnotations: {}
 
   ## Secret containing configuration environment variables
   ## For example enviroment variable: BURROW_ZOOKEEPER_SERVERS - will set Zookeeper servers for Burrow
