@@ -193,6 +193,15 @@ entries:
     version: 0.1.0
   zoonavigator:
   - apiVersion: v2
+    appVersion: 1.1.1
+    created: "2022-02-14T11:14:21.144386774Z"
+    description: Helm chart for Zoonavigator
+    digest: 0dd66451da6d6f2854afe191a3a4c5a142205d364ae5a02db2acbf25ae24364d
+    name: zoonavigator
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/zoonavigator-0.1.2/zoonavigator-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 0.8.0
     created: "2020-04-30T07:29:52.994769399Z"
     description: Helm chart for Zoonavigator
