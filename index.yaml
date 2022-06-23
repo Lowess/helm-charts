@@ -191,6 +191,22 @@ entries:
     urls:
     - https://github.com/Lowess/helm-charts/releases/download/karrot-0.1.0/karrot-0.1.0.tgz
     version: 0.1.0
+  monochart:
+  - apiVersion: v1
+    appVersion: 0.25.1
+    created: "2022-06-23T13:03:11.861666066Z"
+    description: A declarative helm chart for deploying common types of services on
+      Kubernetes
+    digest: 6ce42c8420c856871697a16887d9255c489d0a780d0dee1a9f05f774841e0805
+    home: https://github.com/Lowess/charts/tree/master/charts/monochart
+    icon: https://raw.githubusercontent.com/cloudposse/charts/master/incubator/monochart/logo.png
+    maintainers:
+    - email: hello@gumgum.com
+      name: GumGum Verity
+    name: monochart
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/monochart-0.25.1/monochart-0.25.1.tgz
+    version: 0.25.1
   zoonavigator:
   - apiVersion: v2
     appVersion: 1.1.1
