@@ -1,3 +1,4 @@
+# replicaCount can be set to null to be omitted and let HPA take over
 replicaCount: 1
 
 
