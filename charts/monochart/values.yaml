@@ -87,6 +87,7 @@ deployment:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   # strategy: {}
   revisionHistoryLimit: 10
+  terminationGracePeriodSeconds: 30
   # annotations:
   #   name: value
   # labels:
@@ -105,6 +106,12 @@ deployment:
     labels: {}
     # command:
     args: []
+    # lifecycle:
+    #   preStop:
+    #     exec:
+    #       command: [
+    #         "sh", "-c", "sleep 300"
+    #       ]
 
 
 statefulset:

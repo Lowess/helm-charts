@@ -82,6 +82,13 @@ deployment:
     ## https://github.com/jtblin/kube2iam
     #  iam.amazonaws.com/role: role-arn
     labels: {}
+    # use pod lifecycle to configure a preStop hook
+    lifecycle:
+      preStop:
+        exec:
+          command: [
+            "sh", "-c", "sleep 60"
+          ]
   affinity:
     # use of simple rule
     affinityRule: "ShouldBeOnDifferentNode"

@@ -50,6 +50,7 @@ spec:
 {{- if index .Values "serviceAccountName" }}
       serviceAccountName: {{ .Values.serviceAccountName }}
 {{- end }}
+      terminationGracePeriodSeconds: {{ default 30 (.Values.deployment.terminationGracePeriodSeconds | int) }}
 {{- if .Values.deployment.affinity }}
       affinity:
 {{- if or .Values.deployment.affinity.podAntiAffinity (eq .Values.deployment.affinity.affinityRule "ShouldBeOnDifferentNode") }}
@@ -89,6 +90,10 @@ spec:
 {{- end }}
 {{- with .Values.deployment.pod.securityContext }}
         securityContext:
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- with .Values.deployment.pod.lifecycle }}
+        lifecycle:
 {{ toYaml . | indent 10 }}
 {{- end }}
         ports:
