@@ -11,7 +11,6 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-spec:
 {{- with .Values.ingress.className }}
   ingressClassName: {{ . | quote }}
 {{- end }}
