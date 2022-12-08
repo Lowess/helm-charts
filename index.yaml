@@ -203,6 +203,21 @@ entries:
     version: 0.1.0
   monochart:
   - apiVersion: v1
+    appVersion: 0.25.4
+    created: "2022-12-08T08:29:32.904807259Z"
+    description: A declarative helm chart for deploying common types of services on
+      Kubernetes
+    digest: 4b1820c23e5e0e62b9b73f2726ce12df46608f98d424ff95ebb2d6ea82738bc8
+    home: https://github.com/Lowess/charts/tree/master/charts/monochart
+    icon: https://raw.githubusercontent.com/cloudposse/charts/master/incubator/monochart/logo.png
+    maintainers:
+    - email: hello@gumgum.com
+      name: GumGum Verity
+    name: monochart
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/monochart-0.25.4/monochart-0.25.4.tgz
+    version: 0.25.4
+  - apiVersion: v1
     appVersion: 0.25.2
     created: "2022-07-01T07:16:12.992920731Z"
     description: A declarative helm chart for deploying common types of services on
