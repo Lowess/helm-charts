@@ -51,6 +51,11 @@ spec:
       serviceAccountName: {{ .Values.serviceAccountName }}
 {{- end }}
       terminationGracePeriodSeconds: {{ default 30 (.Values.deployment.terminationGracePeriodSeconds | int) }}
+      dnsPolicy: {{ default "ClusterFirst" .Values.deployment.dnsPolicy }}
+{{- with .Values.deployment.dnsConfig }}
+      dnsConfig:
+{{ toYaml . | indent 10 }}
+{{- end }}
 {{- if .Values.deployment.affinity }}
       affinity:
 {{- if or .Values.deployment.affinity.podAntiAffinity (eq .Values.deployment.affinity.affinityRule "ShouldBeOnDifferentNode") }}

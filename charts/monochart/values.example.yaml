@@ -1,6 +1,6 @@
 replicaCount: null
 
-serviceAccountName: my-service-account
+serviceAccountName: monochart-monochart-default
 
 image:
   repository: nginx
@@ -43,33 +43,22 @@ secrets:
 env:
   INLINE_ENV_NAME: ENV_VALUE
 
-# ENV variables from existing Kubernetes secrets and ConfigMaps
-envFrom:
-  secrets:
-    - secret-1
-    - secret-2
-  configMaps:
-    - config-1
-    - config-2
-
 # ENV variables from fieldRef.fieldPath
 # https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables
 envFromFieldRefFieldPath:
-  ENV_1: path-1
-  ENV_2: path-2
-
-# ENV variables from  secretkeyref
-# https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
-envFromSecretKeyRef:
-  - name: MY_ENV_VARIABLE
-    secret: kubernetes-secret-name
-    key: key-name-in-secret
+  ENV_1: spec.nodeName
 
 deployment:
   enabled: true
   ## Pods replace strategy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   # strategy: {}
+  ## Pods DNS Config
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "1"
   minReadySeconds: 10
   revisionHistoryLimit: 10
   annotations:
@@ -86,23 +75,29 @@ deployment:
     lifecycle:
       preStop:
         exec:
-          command: [
-            "sh", "-c", "sleep 60"
-          ]
+          command: ["sh", "-c", "sleep 60"]
   affinity:
     # use of simple rule
     affinityRule: "ShouldBeOnDifferentNode"
     # use custom affinity rule. Here app MUST be on different host then postgres instance for it
     podAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app
-            operator: In
-            values:
-            - postgresql
-          - key: release
-            operator: In
-            values:
-            - "postgresql"
-        topologyKey: "kubernetes.io/hostname"
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: NotIn
+                values:
+                  - postgresql
+              - key: release
+                operator: NotIn
+                values:
+                  - "postgresql"
+          topologyKey: "kubernetes.io/hostname"
+
+crd:
+  # IAM Service account
+  "v1":
+    ServiceAccount:
+      default:
+        enabled: true
+        annotations: {}
