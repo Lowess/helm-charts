@@ -94,6 +94,21 @@ deployment:
                   - "postgresql"
           topologyKey: "kubernetes.io/hostname"
 
+service:
+  enabled: true
+  type: NodePort
+  ports:
+    http:
+      internal: 8080
+      external: 443
+
+ingress:
+  default:
+    enabled: true
+    port: http
+    hosts:
+      "testme.com": /
+
 crd:
   # IAM Service account
   "v1":
