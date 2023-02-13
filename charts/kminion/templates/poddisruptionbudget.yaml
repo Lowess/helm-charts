@@ -1,0 +1,24 @@
+{{- $root := . -}}
+{{- if .Values.podDisruptionBudget }}
+{{- if semverCompare ">=1.21-0" $root.Capabilities.KubeVersion.GitVersion -}}
+apiVersion: policy/v1
+{{- else -}}
+apiVersion: policy/v1beta1
+{{- end }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "kminion.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "kminion.labels" . | nindent 4}}
+spec:
+  {{- if .Values.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  {{- end }}
+  {{- if .Values.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "kminion.selectorLabels" . | nindent 6}}
+{{- end }}
