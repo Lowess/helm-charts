@@ -156,7 +156,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: zoonavigator.local
-      paths: []
+      paths: ["/"]
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
