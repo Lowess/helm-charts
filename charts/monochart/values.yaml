@@ -92,6 +92,13 @@ deployment:
   #   name: value
   # labels:
   #   name: value
+  # tolerations:
+  #   - key: "gpu"
+  #     operator: "Equal"
+  #     value: "true"
+  #     effect: "NoSchedule"
+  # affinity:
+  #   affinityRule: "ShouldBeOnDifferentNode"
   pod:
     # securityContext: {}
     # hostAliases:

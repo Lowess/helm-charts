@@ -80,6 +80,10 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
+{{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 6 }}
+{{- end }}
       containers:
       - name: {{ .Release.Name }}
         image: {{ required "image.repository is required!" .Values.image.repository }}:{{ required "image.tag is required!" .Values.image.tag }}

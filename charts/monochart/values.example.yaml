@@ -76,6 +76,11 @@ deployment:
       preStop:
         exec:
           command: ["sh", "-c", "sleep 60"]
+  tolerations:
+    - key: "spotinst.io/pool"
+      operator: "Equal"
+      value: "custom-vng"
+      effect: "NoSchedule"
   affinity:
     # use of simple rule
     affinityRule: "ShouldBeOnDifferentNode"
