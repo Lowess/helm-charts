@@ -266,7 +266,7 @@ entries:
   monochart:
   - apiVersion: v1
     appVersion: 0.27.0
-    created: "2023-05-18T10:55:49.808983+02:00"
+    created: "2023-05-18T10:59:22.215575+02:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: ed46093f4d644e65aa691f0f89163cf3d5a3e02eeb7dda4a2c2c9823aabf3508
@@ -378,4 +378,4 @@ entries:
     urls:
     - https://github.com/Lowess/helm-charts/releases/download/zoonavigator-0.1.0/zoonavigator-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-18T10:55:49.809033+02:00"
+generated: "2023-05-18T10:59:22.215708+02:00"
