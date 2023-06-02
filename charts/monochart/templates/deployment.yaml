@@ -79,6 +79,16 @@ spec:
 {{ toYaml . | indent 10 }}
 {{- end }}
 {{- end }}
+{{- if .Values.deployment.affinity.nodeAffinity }}      
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+{{- if .Values.deployment.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}            
+{{- with .Values.deployment.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+{{ toYaml . | indent 16 }}
+{{- end }}
+{{- end }}  
+{{- end }} 
 {{- end }}
 {{- with .Values.deployment.tolerations }}
       tolerations:
