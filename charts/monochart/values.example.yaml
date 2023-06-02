@@ -98,6 +98,14 @@ deployment:
                 values:
                   - "postgresql"
           topologyKey: "kubernetes.io/hostname"
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: Name
+            operator: In
+            values:
+            - va-verity-eks--stage-vng-public          
 
 service:
   enabled: true
