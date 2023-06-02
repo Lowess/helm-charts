@@ -81,6 +81,57 @@ env: {}
 #     key: key-name-in-secret
 
 
+rollout:
+  enabled: false
+  labels: {}
+  pod:
+    annotations: {}
+    labels: {}
+    args: []
+  strategy:
+    canary:
+      # canaryService: canary
+      # stableService: stable
+
+      # abortScaleDownDelaySeconds: 60
+      # dynamicStableScale: true
+      # maxSurge: 10%
+      # maxUnavailable: 1
+
+      # analysis:
+      #   startingStep: 1
+      #   templates:
+      #   - templateName: rollouts-demo--staging-monochart-apdex-score
+      #   - templateName: rollouts-demo--staging-monochart-failure-rate
+
+      # analysis:
+      #   startingStep: 1
+      #   templates:
+      #   - templateName: rollouts-demo--staging-monochart-apdex-score
+      #   - templateName: rollouts-demo--staging-monochart-failure-rate
+
+      # steps:
+      #   - setWeight: 5
+      #   - pause: {}
+      #   - setWeight: 20
+      #   - pause:
+      #       duration: 10m
+      #   - setWeight: 40
+      #   - pause:
+      #       duration: 10m
+      #   - setWeight: 60
+      #   - pause:
+      #       duration: 10m
+      #   - setWeight: 80
+      #   - pause:
+      #       duration: 10m
+
+      # trafficRouting:
+      #   alb:
+      #     ingress: default
+      #     rootService: default
+      #     servicePort: 8080
+
 deployment:
   enabled: false
   ## Pods replace strategy
@@ -240,17 +291,17 @@ cronjob:
 
 ## Service - Exposes resources over a Virtual IP
 service:
-  enabled: false
-  type: ClusterIP
-  # ports:
-  #   name:
-  #     internal: 80
-  #     external: 80
-  # labels:
-  #   name: value
-  # annotations:
-  #   name: value
-
+  default:
+    enabled: false
+    type: ClusterIP
+  #   ports:
+  #     name:
+  #       internal: 80
+  #       external: 80
+  #   labels:
+  #     name: value
+  #   annotations:
+  #     name: value
 
 ## Ingress for load balancer
 ingress:
