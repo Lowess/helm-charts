@@ -26,5 +26,8 @@ for CHART in ${1//,/ }; do
     helm package "charts/$CHART" --destination "${CR_PACKAGE_PATH}";
 done
 
+
 cr upload --skip-existing
-cr index
+git remote set-url origin "https://github.com/${CR_OWNER}/${CR_GIT_REPO}.git"
+cr index --push
+git remote set-url origin "git@github.com:${CR_OWNER}/${CR_GIT_REPO}.git"
