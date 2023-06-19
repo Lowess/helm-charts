@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lowess Helm Chart Repository</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:700|Roboto|Roboto+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+
+        html {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .logo {
+            margin-top: 32px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            max-width: 560px;
+            margin-bottom: 100px;
+            padding: 16px;
+        }
+
+        .title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 32px;
+            margin-bottom: 24px;
+        }
+
+        .text {
+            text-align: center;
+            margin: 16px 0 8px;
+            font-size: 16px;
+            line-height: 20px;
+        }
+
+        .mono {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            line-height: 20px;
+            width: 100%;
+            max-width: 520px;
+            border: 1px solid rgba(149, 157, 172, 0.24);
+            transition: border-color 0.24s cubic-bezier(0.24, 0.1, 0.24, 1);
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin: 12px 0 16px;
+            cursor: pointer;
+        }
+
+        .mono svg {
+            flex: 0 0 24px;
+            margin-left: 16px;
+            transition: color 0.24s cubic-bezier(0.24, 0.1, 0.24, 1);
+        }
+
+        .mono:hover {
+            border: 1px solid rgba(252, 115, 3, 0.48);
+        }
+
+        .mono:hover svg {
+            color: rgb(252, 115, 3);
+        }
+
+        .link {
+            text-decoration: none;
+            outline: none;
+            color: rgb(252, 115, 3);
+            transition: color 0.24s cubic-bezier(0.24, 0.1, 0.24, 1);
+        }
+
+        .link:hover {
+            color: rgba(252, 115, 3, 0.72);
+        }
+
+        .notice {
+            background: rgba(252, 115, 3, 0.72);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            pointer-events: none;
+            position: absolute;
+            bottom: -40px;
+            transition: 0.24s cubic-bezier(0.24, 0.1, 0.24, 1);
+        }
+
+        .show {
+            bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='container'>
+        <section>
+            <div class='title'> Lowess Helm Chart Repository </div>
+
+            <div class='text'> To deploy any Lowess Helm Chart into your Kubernetes cluster: </div>
+
+            <div id='deploy' class='mono' data-command='helm repo add lowess https://lowess.github.io/helm-charts/'>
+                $ helm repo add lowess https://lowess.github.io/helm-charts/
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        d="M5.7 14.7H4.8C4.32261 14.7 3.86477 14.5104 3.52721 14.1728C3.18964 13.8352 3 13.3774 3 12.9V4.8C3 4.32261 3.18964 3.86477 3.52721 3.52721C3.86477 3.18964 4.32261 3 4.8 3H12.9C13.3774 3 13.8352 3.18964 14.1728 3.52721C14.5104 3.86477 14.7 4.32261 14.7 4.8V5.7M11.1 9.3H19.2C20.1941 9.3 21 10.1059 21 11.1V19.2C21 20.1941 20.1941 21 19.2 21H11.1C10.1059 21 9.3 20.1941 9.3 19.2V11.1C9.3 10.1059 10.1059 9.3 11.1 9.3Z" />
+                </svg>
+            </div>
+
+            <div class='text'> To get all available Lowess Helm Charts: </div>
+
+            <div id='get' class='mono' data-command='helm search repo lowess'>
+                $ helm search repo lowess
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        d="M5.7 14.7H4.8C4.32261 14.7 3.86477 14.5104 3.52721 14.1728C3.18964 13.8352 3 13.3774 3 12.9V4.8C3 4.32261 3.18964 3.86477 3.52721 3.52721C3.86477 3.18964 4.32261 3 4.8 3H12.9C13.3774 3 13.8352 3.18964 14.1728 3.52721C14.5104 3.86477 14.7 4.32261 14.7 4.8V5.7M11.1 9.3H19.2C20.1941 9.3 21 10.1059 21 11.1V19.2C21 20.1941 20.1941 21 19.2 21H11.1C10.1059 21 9.3 20.1941 9.3 19.2V11.1C9.3 10.1059 10.1059 9.3 11.1 9.3Z" />
+                </svg>
+            </div>
+
+            <div class='text'>
+                <a class='link' target='_blank' href='https://github.com/Lowess/helm-charts'>Github</a>
+            </div>
+        </section>
+
+        <div class='notice'>
+            Copied to clipboard
+        </div>
+    </div>
+
+    <script>
+        const notice = document.querySelector('.notice');
+
+        function writeText(str) {
+            const range = document.createRange();
+
+            function listener(e) {
+                e.clipboardData.setData('text/plain', str);
+                e.preventDefault();
+            }
+
+            range.selectNodeContents(document.body);
+            document.getSelection().addRange(range);
+            document.addEventListener('copy', listener);
+            document.execCommand('copy');
+            document.removeEventListener('copy', listener);
+            document.getSelection().removeAllRanges();
+        }
+
+        function copy(name) {
+
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 1500)
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(name);
+            }
+            return writeText(name);
+        }
+
+        document.querySelectorAll('.mono').forEach(el => {
+            el.addEventListener('click', () => copy(el.dataset.command))
+        })
+    </script>
+</body>
+
+</html>
