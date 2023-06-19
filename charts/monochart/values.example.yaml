@@ -84,7 +84,7 @@ deployment:
   securityContext:
     runAsUser: 1000
     runAsGroup: 3000
-    fsGroup: 2000        
+    fsGroup: 2000
   affinity:
     # use of simple rule
     affinityRule: "ShouldBeOnDifferentNode"
@@ -109,15 +109,76 @@ deployment:
           - key: Name
             operator: In
             values:
-            - va-verity-eks--stage-vng-public          
+            - va-verity-eks--stage-vng-public
+
+rollout:
+  enabled: true
+  labels: {}
+  pod:
+    annotations: {}
+    labels: {}
+    args: []
+  strategy:
+    canary:
+      canaryService: canary
+      stableService: stable
+
+      abortScaleDownDelaySeconds: 60
+      dynamicStableScale: true
+      maxSurge: 10%
+      maxUnavailable: 1
+
+      analysis:
+        startingStep: 1
+        templates:
+        - templateName: analysis-run-test
+
+      steps:
+        - setWeight: 5
+        - pause: {}
+        - setWeight: 20
+        - pause:
+            duration: 10m
+        - setWeight: 40
+        - pause:
+            duration: 10m
+        - setWeight: 60
+        - pause:
+            duration: 10m
+        - setWeight: 80
+        - pause:
+            duration: 10m
+
+      trafficRouting:
+        alb:
+          ingress: default
+          rootService: default
+          servicePort: 443
 
 service:
-  enabled: true
-  type: NodePort
-  ports:
-    http:
-      internal: 8080
-      external: 443
+  default:
+    enabled: true
+    type: NodePort
+    ports:
+      http:
+        internal: 8080
+        external: 443
+
+  stable:
+    enabled: true
+    type: NodePort
+    ports:
+      http:
+        internal: 8080
+        external: 443
+
+  canary:
+    enabled: true
+    type: NodePort
+    ports:
+      http:
+        internal: 8080
+        external: 443
 
 ingress:
   default:

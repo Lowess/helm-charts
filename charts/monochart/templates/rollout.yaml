@@ -1,0 +1,190 @@
+{{- $root := . -}}
+{{- $rolloutCommonName := include "common.fullname" . -}}
+{{- if .Values.rollout.enabled -}}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ $rolloutCommonName }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- with .Values.rollout.labels }}
+      {{- toYaml .| nindent 4 }}
+    {{- end }}
+spec:
+  {{- if hasKey $.Values.rollout "replicas" }}
+  replicas: {{ $.Values.rollout.replicas }}
+  {{- else }}
+  {{- with .Values.replicaCount }}
+  replicas: {{ . }}
+  {{- end }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "common.name" . }}
+      release: {{ .Release.Name }}
+      serve: "true"
+  {{- with .Values.rollout.strategy.canary }}
+  strategy:
+    canary:
+      abortScaleDownDelaySeconds: {{ .abortScaleDownDelaySeconds | default 30 }}
+      dynamicStableScale: {{ default false .dynamicStableScale }}
+      {{- with .maxSurge }}
+      maxSurge: {{ . }}
+      {{- end }}
+      {{- with .maxUnavailable }}
+      maxUnavailable: {{ . }}
+      {{- end }}
+      {{- if (and (hasKey $root.Values.service .stableService) (get (get $root.Values.service .stableService) "enabled")) }}
+      stableService: {{ $rolloutCommonName }}-{{ .stableService }}
+      {{- else }}
+                {{ fail (printf "Can't set stableService to '%s' as no such service is defined and enabled, list of services: %s" .canaryService (keys $root.Values.service)) }}
+      {{- end }}
+      {{- if (and (hasKey $root.Values.service .canaryService) (get (get $root.Values.service .canaryService) "enabled")) }}
+      canaryService: {{ $rolloutCommonName }}-{{ .canaryService }}
+      {{- else }}
+        {{ fail (printf "Can't set canaryService to '%s' as no such service is defined and enabled, list of services: %s" .canaryService (keys $root.Values.service)) }}
+      {{- end }}
+      {{- with .steps }}
+      steps:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .analysis }}
+      analysis:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .trafficRouting }}
+      trafficRouting:
+        alb:
+          {{- if (and (hasKey $root.Values.ingress .alb.ingress) (get (get $root.Values.ingress .alb.ingress) "enabled")) }}
+          ingress: {{ $rolloutCommonName }}-{{ .alb.ingress }}
+          {{- else }}
+            {{ fail (printf "Can't set ALB ingress to '%s' as no such ingress is defined and enabled, list of ingresses: %s" .ingress (keys $root.Values.ingress)) }}
+          {{- end }}
+          {{- if (and (hasKey $root.Values.service .alb.rootService) (get (get $root.Values.service .alb.rootService) "enabled")) }}
+          rootService: {{ $rolloutCommonName }}
+          {{- else }}
+            {{ fail (printf "Can't set rootService ingress to 'default' as no such service is defined and enabled, list of services: %s" .alb.rootService (keys $root.Values.service)) }}
+          {{- end }}
+          servicePort: 8080
+      {{- end }}
+  {{- end }}
+  minReadySeconds: {{ default 0 (.Values.rollout.minReadySeconds | int) }}
+  revisionHistoryLimit: {{ .Values.rollout.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.name" . }}
+        release: {{ .Release.Name }}
+        serve: "true"
+    spec:
+{{- if index .Values "serviceAccountName" }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+{{- end }}
+      terminationGracePeriodSeconds: {{ default 30 (.Values.rollout.terminationGracePeriodSeconds | int) }}
+      dnsPolicy: {{ default "ClusterFirst" .Values.rollout.dnsPolicy }}
+{{- with .Values.rollout.dnsConfig }}
+      dnsConfig:
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- if .Values.rollout.affinity }}
+      affinity:
+{{- if or .Values.rollout.affinity.podAntiAffinity (eq .Values.rollout.affinity.affinityRule "ShouldBeOnDifferentNode") }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+{{- if .Values.rollout.affinity.podAntiAffinity }}
+{{- if .Values.rollout.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
+{{- with .Values.rollout.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if eq .Values.rollout.affinity.affinityRule "ShouldBeOnDifferentNode" }}
+{{- include "monochart.affinityRule.ShouldBeOnDifferentNode" . | nindent 10 }}
+{{- end }}
+{{- end }}
+{{- if .Values.rollout.affinity.podAffinity }}
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+{{- with .Values.rollout.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution }}
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- end }}
+{{- if .Values.rollout.affinity.nodeAffinity }}
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+{{- if .Values.rollout.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+{{- with .Values.rollout.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+{{ toYaml . | indent 16 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- with .Values.rollout.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 6 }}
+{{- end }}
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ required "image.repository is required!" .Values.image.repository }}:{{ required "image.tag is required!" .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{ include "monochart.env" . | indent 8 }}
+{{- with .Values.rollout.pod.command }}
+        command:
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- with .Values.rollout.pod.args }}
+        args:
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- with .Values.rollout.pod.securityContext }}
+        securityContext:
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- with .Values.rollout.pod.lifecycle }}
+        lifecycle:
+{{ toYaml . | indent 10 }}
+{{- end }}
+        ports:
+{{- range $name, $port := (get (get .Values.service "default") "ports") }}
+{{- if $port }}
+          - name: {{ $name }}
+            containerPort: {{ $port.internal }}
+            protocol: {{ default "TCP" $port.protocol  }}
+{{- end }}
+{{- end }}
+        volumeMounts:
+        {{- if .Values.persistence.enabled }}
+        - mountPath: {{ .Values.persistence.mountPath | quote }}
+          name: storage
+        {{- end }}
+        {{- include "monochart.files.volumeMounts" . |  nindent 8 }}
+{{- with .Values.probes }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.resources }}
+        resources:
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- with .Values.rollout.pod.hostAliases }}
+      hostAliases:
+{{ toYaml . | indent 8 }}
+{{- end }}
+      imagePullSecrets:
+{{- with .Values.image.pullSecrets }}
+      {{- range . }}
+        - name: {{ . }}
+      {{- end }}
+{{- end }}
+      volumes:
+      {{- if .Values.persistence.enabled }}
+      - name: storage
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "common.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- end }}
+      {{- include "monochart.files.volumes" . | nindent 6 }}
+{{- end -}}

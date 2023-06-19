@@ -1,24 +1,32 @@
-{{- if .Values.service.enabled -}}
+{{- $root := . -}}
+{{- $serviceName := include "common.fullname" . -}}
+{{- range $name, $service := .Values.service -}}
+{{- if $service.enabled }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.fullname" . }}
-{{- with .Values.service.annotations }}
+  {{- if eq $name "default" }}
+  name: {{ $serviceName }}
+  {{- else }}
+  name: {{ $serviceName }}-{{ $name }}
+  {{- end }}
+{{- with $service.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "common.labels.standard" . | indent 4 }}
-{{- with .Values.service.labels }}
+{{ include "common.labels.standard" $root | indent 4 }}
+{{- with $service.labels }}
 {{ toYaml .| indent 4 }}
 {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-{{- if eq .Values.service.type "ExternalName" }}
-  externalName: {{ .Values.service.externalName }}
+  type: {{ $service.type }}
+{{- if eq $service.type "ExternalName" }}
+  externalName: {{ $service.externalName }}
 {{- else }}
   ports:
-{{- range $name, $port := .Values.service.ports }}
+{{- range $name, $port := $service.ports }}
 {{- if $port }}
   - targetPort: {{ $name }}
     port: {{ $port.external }}
@@ -26,16 +34,17 @@ spec:
     name: {{ $name }}
 {{- end }}
 {{- end }}
-{{- if .Values.service.selector }}
-{{- with .Values.service.selector }}
+{{- if $service.selector }}
+{{- with $service.selector }}
   selector:
 {{ toYaml . | indent 4 }}
 {{- end }}
 {{- else }}
   selector:
-    app: {{ include "common.name" . }}
-    release: {{ .Release.Name }}
+    app: {{ include "common.name" $root }}
+    release: {{ $root.Release.Name }}
     serve: "true"
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
