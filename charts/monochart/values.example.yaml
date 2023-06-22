@@ -194,3 +194,20 @@ crd:
       default:
         enabled: true
         annotations: {}
+
+dockercfg:
+  enabled: false   
+
+statefulset:
+  enabled: true
+  persistence:
+    enabled: true
+    useVolumeClaimTemplates: true
+    mountPath: /tmp
+    accessMode: ReadWriteOnce
+    size: 30Gi
+    storageClass: gp3
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000   

@@ -42,6 +42,10 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
+{{- with .Values.statefulset.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}  
+{{- end }}
 {{- if index .Values "serviceAccountName" }}
       serviceAccountName: {{ .Values.serviceAccountName }}
 {{- end }}
