@@ -112,7 +112,7 @@ deployment:
             - va-verity-eks--stage-vng-public
 
 rollout:
-  enabled: true
+  enabled: false
   labels: {}
   pod:
     annotations: {}
@@ -154,6 +154,21 @@ rollout:
           ingress: default
           rootService: default
           servicePort: 443
+
+statefulset:
+  enabled: true
+  persistence:
+    enabled: true
+    useVolumeClaimTemplates: true
+    mountPath: /tmp
+    accessMode: ReadWriteOnce
+    size: 30Gi
+    storageClass: gp3
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
 
 service:
   default:

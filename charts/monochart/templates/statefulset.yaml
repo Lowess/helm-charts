@@ -42,6 +42,10 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
+{{- with .Values.statefulset.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+{{- end }}
 {{- if index .Values "serviceAccountName" }}
       serviceAccountName: {{ .Values.serviceAccountName }}
 {{- end }}
@@ -87,12 +91,15 @@ spec:
         securityContext:
 {{ toYaml . | indent 10 }}
 {{- end }}
+{{- $defaultService := (get .Values.service "default") }}
+{{ if $defaultService }}
         ports:
-{{- range $name, $port := .Values.service.ports }}
+{{- range $name, $port := (get $defaultService "ports") }}
 {{- if $port }}
-        - name: {{ $name }}
-          containerPort: {{ $port.internal }}
-          protocol: {{ default "TCP" $port.protocol  }}
+          - name: {{ $name }}
+            containerPort: {{ $port.internal }}
+            protocol: {{ default "TCP" $port.protocol  }}
+{{- end }}
 {{- end }}
 {{- end }}
         volumeMounts:
