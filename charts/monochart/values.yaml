@@ -4,6 +4,13 @@ replicaCount: 1
 
 # serviceAccountName: my-service-account
 
+dockercfg:
+  enabled: false
+  # image:
+  #   pullSecret:
+  #     registry: https://index.docker.io/v1/
+  #     username: example
+  #     password: password
 
 image:
   repository: scratch

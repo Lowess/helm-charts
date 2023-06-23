@@ -1,0 +1,5 @@
+service:
+  default:
+    enabled: true
+  stable:
+    enabled: true

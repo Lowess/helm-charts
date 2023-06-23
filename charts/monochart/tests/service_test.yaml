@@ -1,0 +1,20 @@
+suite: Test monochart Service
+templates:
+  - templates/service.yaml
+values:
+  - values/service.yaml
+release:
+  name: my-release
+
+tests:
+  - it: should pass
+    release:
+      name: my-release
+
+  - it: assert type
+    asserts:
+      - hasDocuments:
+          count: 2
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
