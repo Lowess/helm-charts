@@ -50,6 +50,10 @@ spec:
       serviceAccountName: {{ .Values.serviceAccountName }}
 {{- end }}
       terminationGracePeriodSeconds: {{ .Values.statefulset.terminationGracePeriodSeconds }}
+{{- with .Values.statefulset.dnsConfig }}
+      dnsConfig:
+{{ toYaml . | indent 10 }}
+{{- end }}      
 {{- if .Values.statefulset.affinity }}
       affinity:
 {{- if or .Values.statefulset.affinity.podAntiAffinity (eq .Values.statefulset.affinity.affinityRule "ShouldBeOnDifferentNode") }}
@@ -73,6 +77,22 @@ spec:
 {{ toYaml . | indent 10 }}
 {{- end }}
 {{- end }}
+{{- end }}
+
+
+{{- if .Values.statefulset.affinity.nodeAffinity }}
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+{{- if .Values.statefulset.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+{{- with .Values.statefulset.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+{{ toYaml . | indent 16 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- with .Values.statefulset.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 6 }}
 {{- end }}
       containers:
       - name: {{ .Release.Name }}

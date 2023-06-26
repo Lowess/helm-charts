@@ -168,7 +168,19 @@ statefulset:
     runAsUser: 1000
     runAsGroup: 1000
     fsGroup: 1000
-
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "1"
+  affinity:        
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: Name
+            operator: In
+            values:
+            - va-verity-eks--stage-vng-public        
 
 service:
   default:
