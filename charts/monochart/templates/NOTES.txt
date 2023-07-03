@@ -1,3 +1,63 @@
-Thank you for installing {{ .Chart.Name }}.
+{{- $digIngress := (dict "host" (first (keys (dig "default" "hosts" (dict) .Values.ingress)))) -}}
+{{- $digSvc := (dict "host" (dig "default" "annotations" "external-dns.alpha.kubernetes.io/hostname" (dict) .Values.service)) -}}
+{{- $appUrl := "-" -}}
+{{- range $url := (pluck "host" $digIngress $digSvc) -}}
+    {{- if not (empty $url) -}}
+        {{ $appUrl = $url }}
+    {{- end -}}
+{{- end -}}
 
-Your release is named {{ .Release.Name }}.
+------------------------------------
+📦 {{ include "colorize" (list "red" .Chart.Name) }} {{ include "colorize" (list "blue" .Chart.Version) }}
+└── 🌀 Namespace: {{ include "colorize" (list "green" .Release.Namespace) }}
+└── 🚀 Release:   {{ include "colorize" (list "yellow" .Release.Name) }}
+└── 🐳 Container: {{ print (include "colorize" (list "gray" .Values.image.repository)) ":" (include "colorize" (list "purple" .Values.image.tag)) }}
+└── 🌐 URL:       {{ include "colorize" (list "cyan" (print "https://" $appUrl)) }}
+------------------------------------
+
+{{- $nested := list "configMaps" "secrets" "service" "ingress" "crd" }}
+
+📚Manifests deployed:
+│
+{{- range $key, $val := .Values -}}
+    {{- if kindIs "map" $val  -}}
+        {{- if not (empty $val) -}}
+            {{- /* If kind is a nested objects */ -}}
+            {{- if has $key $nested -}}
+                {{ $nested_obj := dict }}
+                {{- range $nkey, $nval := $val -}}
+                    {{- /* handle CRDs */ -}}
+                    {{- if eq $key "crd" -}}
+                        {{- range $crdkey, $crdval := $nval -}}
+                            {{- range $crdobj_key, $crdobj_val := $crdval -}}
+                                {{- if (and (hasKey $crdobj_val "enabled") (get $crdobj_val "enabled")) -}}
+                                    {{- $_ := set $nested_obj $crdkey (append (get $nested_obj $crdkey | default list) $crdobj_key) -}}
+                                {{- end -}}
+                            {{- end -}}
+                        {{- end -}}
+                    {{- /* other nested objects */ -}}
+                    {{- else if (and (hasKey $nval "enabled") (get $nval "enabled")) -}}
+                        {{- $_ := set $nested_obj $nkey list -}}
+                    {{- end -}}
+                {{- end -}}
+                {{- /* Display nested objects */ -}}
+                {{- if gt (len $nested_obj) 0 -}}
+                    {{ print "├─ ✅" (include "colorize" (list "green" ($key | camelcase))) | nindent 0 }}
+                    {{- range $k, $v := $nested_obj -}}
+                        {{- if gt (len $v) 0 -}}
+                            {{- print "│  └── ✅" (include "colorize" (list "purple" ($k | camelcase)))  | nindent 0 -}}
+                            {{- range $elem := $v -}}
+                            {{- print "│     └── ✅" $elem | nindent 0 -}}
+                            {{- end -}}
+                        {{- else -}}
+                            {{- print "│  └── ✅" $k | nindent 0 -}}
+                        {{- end -}}
+
+                    {{- end -}}
+                {{- end -}}
+            {{- else if (and (hasKey $val "enabled") (get $val "enabled")) -}}
+                {{ print "├─ ✅" (include "colorize" (list "green" ($key | camelcase))) | nindent 0 }}
+            {{- end }}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
