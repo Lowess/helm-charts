@@ -199,6 +199,15 @@ service:
         internal: 8080
         external: 443
 
+  jmx:
+    enabled: true
+    type: ClusterIP
+    ports:
+      jmx:
+        internal: 9010
+        external: 9010
+    annotations: {}        
+
   canary:
     enabled: true
     type: NodePort

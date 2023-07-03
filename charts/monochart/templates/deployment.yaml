@@ -119,14 +119,15 @@ spec:
         lifecycle:
 {{ toYaml . | indent 10 }}
 {{- end }}
-{{- $defaultService := (get .Values.service "default") }}
-{{ if $defaultService }}
         ports:
-{{- range $name, $port := (get $defaultService "ports") }}
+{{- range $serviceName, $service := .Values.service }}
+{{- if $service.enabled }}
+{{- range $name, $port := (get $service "ports") }}
 {{- if $port }}
           - name: {{ $name }}
             containerPort: {{ $port.internal }}
             protocol: {{ default "TCP" $port.protocol  }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
