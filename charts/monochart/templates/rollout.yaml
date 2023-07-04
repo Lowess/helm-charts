@@ -146,11 +146,18 @@ spec:
 {{ toYaml . | indent 10 }}
 {{- end }}
         ports:
-{{- range $name, $port := (get (get .Values.service "default") "ports") }}
-{{- if $port }}
+{{- $registeredPorts := list -}}
+{{- range $serviceName, $service := .Values.service }}
+{{- $portId := (sha256sum (toString $service)) -}}
+{{- if $service.enabled }}
+{{- range $name, $port := (get $service "ports") }}
+{{- if (and $port (not (has $portId $registeredPorts))) }}
           - name: {{ $name }}
             containerPort: {{ $port.internal }}
             protocol: {{ default "TCP" $port.protocol  }}
+{{- $registeredPorts = append $registeredPorts $portId -}}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
         volumeMounts:
