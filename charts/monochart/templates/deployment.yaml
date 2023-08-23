@@ -20,6 +20,7 @@ spec:
     matchLabels:
       app: {{ include "common.name" . }}
       release: {{ .Release.Name }}
+      type: {{ include "common.name" . }}
 {{- with .Values.deployment.strategy }}
   strategy:
 {{ toYaml . | indent 4 }}
@@ -40,6 +41,7 @@ spec:
       labels:
         app: {{ include "common.name" . }}
         release: {{ .Release.Name | quote }}
+        type: {{ include "common.name" . }}
         serve: "true"
 {{- if .Values.deployment.pod}}
 {{- with .Values.deployment.pod.labels }}
@@ -55,6 +57,10 @@ spec:
 {{- with .Values.deployment.dnsConfig }}
       dnsConfig:
 {{ toYaml . | indent 10 }}
+{{- end }}
+{{- if .Values.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints: {{ .Values.deployment.topologySpreadConstraints }}
+      {{- toYaml . | nindent 6 }}
 {{- end }}
 {{- if .Values.deployment.affinity }}
       affinity:
