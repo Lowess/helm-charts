@@ -64,8 +64,7 @@ deployment:
   annotations:
     nginx.version: 1.15.3
   labels:
-    component: nginx
-    type: nginx-test    
+    component: nginx    
   pod:
     annotations: {}
     ## https://github.com/uswitch/kiam
@@ -77,6 +76,13 @@ deployment:
       preStop:
         exec:
           command: ["sh", "-c", "sleep 60"]
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app: nginx-test          
   tolerations:
     - key: "spotinst.io/pool"
       operator: "Equal"
@@ -111,13 +117,6 @@ deployment:
             operator: In
             values:
             - va-verity-eks--stage-vng-public
-  topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: kubernetes.io/hostname
-      whenUnsatisfiable: ScheduleAnyway
-      labelSelector:
-        matchLabels:
-          type: nginx-test
 
 rollout:
   enabled: false
