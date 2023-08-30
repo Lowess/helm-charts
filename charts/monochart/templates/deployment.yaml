@@ -20,6 +20,9 @@ spec:
     matchLabels:
       app: {{ default (include "common.name" .) .Values.deployment.labels.app }}
       release: {{ .Release.Name }}
+{{- if .Values.deployment.labels }}
+      type: {{ .Values.deployment.labels.type | default (include "common.name" .)  }}
+{{- end }}      
 {{- with .Values.deployment.strategy }}
   strategy:
 {{ toYaml . | indent 4 }}
@@ -41,6 +44,9 @@ spec:
         app: {{ default (include "common.name" .) .Values.deployment.labels.app }}
         release: {{ .Release.Name | quote }}
         serve: "true"
+{{- if .Values.deployment.labels }}
+        type: {{ .Values.deployment.labels.type | default (include "common.name" .)  }}
+{{- end }}         
 {{- if .Values.deployment.pod}}
 {{- with .Values.deployment.pod.labels }}
 {{ toYaml .| indent 8 }}
