@@ -18,7 +18,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      app: {{ default (include "common.name" .) .Values.deployment.labels.app }}
+      app: {{ include "common.name" . }}
       release: {{ .Release.Name }}
 {{- if .Values.deployment.labels }}
       type: {{ .Values.deployment.labels.type | default (include "common.name" .)  }}
@@ -41,7 +41,7 @@ spec:
 {{- end }}
 {{- end }}
       labels:
-        app: {{ default (include "common.name" .) .Values.deployment.labels.app }}
+        app: {{ include "common.name" . }}
         release: {{ .Release.Name | quote }}
         serve: "true"
 {{- if .Values.deployment.labels }}
