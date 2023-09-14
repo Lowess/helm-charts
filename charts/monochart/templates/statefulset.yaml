@@ -18,7 +18,8 @@ spec:
     matchLabels:
       app: {{ include "common.name" . }}
       release: {{ .Release.Name }}
-  serviceName: {{ include "common.fullname" . }}
+  serviceName: {{ include "common.fullname" . }}  
+  podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
 {{- with .Values.statefulset.strategy }}
   updateStrategy:

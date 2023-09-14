@@ -179,6 +179,7 @@ statefulset:
     options:
       - name: ndots
         value: "1"
+  podManagementPolicy: "Parallel"
   affinity:        
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
