@@ -22,7 +22,7 @@ spec:
       release: {{ .Release.Name }}
 {{- if .Values.deployment.labels }}
       type: {{ .Values.deployment.labels.type | default (include "common.name" .)  }}
-{{- end }}      
+{{- end }}
 {{- with .Values.deployment.strategy }}
   strategy:
 {{ toYaml . | indent 4 }}
@@ -46,7 +46,7 @@ spec:
         serve: "true"
 {{- if .Values.deployment.labels }}
         type: {{ .Values.deployment.labels.type | default (include "common.name" .)  }}
-{{- end }}         
+{{- end }}
 {{- if .Values.deployment.pod}}
 {{- with .Values.deployment.pod.labels }}
 {{ toYaml .| indent 8 }}
@@ -55,10 +55,10 @@ spec:
     spec:
 {{- if .Values.deployment.topologySpreadConstraints }}
 {{- with .Values.deployment.topologySpreadConstraints }}
-      topologySpreadConstraints: 
-{{ toYaml . | indent 8 }}      
-{{- end }}            
-{{- end }}    
+      topologySpreadConstraints:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- end }}
 {{- if index .Values "serviceAccountName" }}
       serviceAccountName: {{ .Values.serviceAccountName }}
 {{- end }}
@@ -154,6 +154,9 @@ spec:
         {{- if .Values.persistence.enabled }}
         - mountPath: {{ .Values.persistence.mountPath | quote }}
           name: storage
+        {{- else if .Values.deployment.ephemeral.enabled }}
+        - mountPath: {{ .Values.deployment.ephemeral.mountPath | quote }}
+          name: scratch
         {{- end }}
         {{- include "monochart.files.volumeMounts" . |  nindent 8 }}
         {{- end }}
@@ -178,6 +181,20 @@ spec:
       volumes:
       {{- if .Values.deployment.volumes }}
         {{- toYaml .Values.deployment.volumes | nindent 6 }}
+      {{- end }}
+      {{- if .Values.deployment.ephemeral.enabled }}
+      - name: scratch
+        ephemeral:
+          volumeClaimTemplate:
+            metadata:
+              labels:
+                type: {{ include "common.name" . }}
+            spec:
+              accessModes: [ {{ .Values.deployment.ephemeral.accessMode | quote }} ]
+              storageClassName: {{ .Values.deployment.ephemeral.storageClassName | quote }}
+              resources:
+                requests:
+                  storage: {{ .Values.deployment.ephemeral.size }}
       {{- end }}
       {{- if .Values.persistence.enabled }}
       - name: storage
