@@ -76,6 +76,14 @@ deployment:
       preStop:
         exec:
           command: ["sh", "-c", "sleep 60"]
+    ## Directly attach Volume
+    volumeMounts:
+      - name: apmsocketpath
+        mountPath: /var/run/datadog
+  volumes:
+    - hostPath:
+        path: /var/run/datadog/
+      name: apmsocketpath
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: kubernetes.io/hostname
