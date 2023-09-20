@@ -64,7 +64,14 @@ deployment:
   annotations:
     nginx.version: 1.15.3
   labels:
-    component: nginx    
+    component: nginx
+  ephemeral:
+    enabled: true
+    accessMode: ReadWriteOnce
+    mountPath: /tmp
+    storageClassName: scratch-storage-class
+    size: 8Gi
+
   pod:
     annotations: {}
     ## https://github.com/uswitch/kiam
@@ -90,7 +97,7 @@ deployment:
       whenUnsatisfiable: ScheduleAnyway
       labelSelector:
         matchLabels:
-          app: nginx-test          
+          app: nginx-test
   tolerations:
     - key: "spotinst.io/pool"
       operator: "Equal"
@@ -188,7 +195,7 @@ statefulset:
       - name: ndots
         value: "1"
   podManagementPolicy: "Parallel"
-  affinity:        
+  affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
@@ -196,7 +203,7 @@ statefulset:
           - key: Name
             operator: In
             values:
-            - va-verity-eks--stage-vng-public        
+            - va-verity-eks--stage-vng-public
 
 service:
   default:
