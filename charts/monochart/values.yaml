@@ -354,6 +354,7 @@ resources: {}
 ## Persistence and volumes
 persistence:
   enabled: false
+  ephemeral: false
   storageName: storage
   mountPath: /data
   accessMode: ReadWriteOnce

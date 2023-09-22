@@ -153,10 +153,7 @@ spec:
         {{- end }}
         {{- if .Values.persistence.enabled }}
         - mountPath: {{ .Values.persistence.mountPath | quote }}
-          name: storage
-        {{- else if .Values.deployment.ephemeral.enabled }}
-        - mountPath: {{ .Values.deployment.ephemeral.mountPath | quote }}
-          name: scratch
+          name: {{ .Values.persistence.storageName }}
         {{- end }}
         {{- include "monochart.files.volumeMounts" . |  nindent 8 }}
         {{- end }}
@@ -182,29 +179,29 @@ spec:
       {{- if .Values.deployment.volumes }}
         {{- toYaml .Values.deployment.volumes | nindent 6 }}
       {{- end }}
-      {{- if .Values.deployment.ephemeral.enabled }}
-      - name: scratch
+      {{- if .Values.persistence }}
+      {{- if .Values.persistence.enabled }}
+      - name: {{ .Values.persistence.storageName }}
+      {{- if and (hasKey .Values.persistence "ephemeral") .Values.persistence.ephemeral }}
         ephemeral:
           volumeClaimTemplate:
             metadata:
               labels:
                 type: {{ include "common.name" . }}
             spec:
-              accessModes: [ {{ .Values.deployment.ephemeral.accessMode | quote }} ]
-              storageClassName: {{ .Values.deployment.ephemeral.storageClassName | quote }}
+              accessModes: [ {{ .Values.persistence.accessMode | quote }} ]
+              storageClassName: {{ .Values.persistence.storageClass | quote }}
               resources:
                 requests:
-                  storage: {{ .Values.deployment.ephemeral.size }}
-      {{- end }}
-      {{- if .Values.persistence.enabled }}
-      - name: storage
-      {{- if .Values.persistence.enabled }}
+                  storage: {{ .Values.persistence.size }}
+      {{- else }}
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "common.fullname" .) }}
+      {{- end }}
       {{- else }}
         emptyDir: {}
       {{- end }}
       {{- end }}
-      {{- include "monochart.files.volumes" . | nindent 6 }}
       {{- end }}
+      {{- include "monochart.files.volumes" . | nindent 6 }}
 {{- end -}}
