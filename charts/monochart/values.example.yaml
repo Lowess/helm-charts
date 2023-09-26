@@ -65,12 +65,6 @@ deployment:
     nginx.version: 1.15.3
   labels:
     component: nginx
-  ephemeral:
-    enabled: true
-    accessMode: ReadWriteOnce
-    mountPath: /tmp
-    storageClassName: scratch-storage-class
-    size: 8Gi
 
   pod:
     annotations: {}
@@ -131,7 +125,16 @@ deployment:
           - key: Name
             operator: In
             values:
-            - va-verity-eks--stage-vng-public
+            - custom-worker-group
+
+persistence:
+  enabled: true
+  storageName: ephemeral-storage
+  ephemeral: true
+  mountPath: /tmp
+  accessMode: ReadWriteOnce
+  size: 30Gi
+  storageClass: gp3
 
 rollout:
   enabled: false
