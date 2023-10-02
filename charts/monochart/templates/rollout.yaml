@@ -65,7 +65,7 @@ spec:
           {{- else }}
             {{ fail (printf "Can't set rootService ingress to 'default' as no such service is defined and enabled, list of services: %s" .alb.rootService (keys $root.Values.service)) }}
           {{- end }}
-          servicePort: 8080
+          servicePort: {{ (.alb.servicePort | int) | default 8080 }}
       {{- end }}
   {{- end }}
   minReadySeconds: {{ default 0 (.Values.rollout.minReadySeconds | int) }}
