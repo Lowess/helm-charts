@@ -65,8 +65,8 @@ data:
     class-name={{ $value.className | default "kafka" | quote }}
     cluster="{{ $value.clusterName | default $key }}"
     servers={{ include "burrow.servers" $value.servers }}
-    group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
-    group-whitelist={{ $value.groupWhitelist | default ".*" | quote }}
+    group-denylist={{ $value.groupdenylist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
+    group-allowlist={{ $value.groupallowlist | default ".*" | quote }}
     start-latest={{ $value.startLatest | default false }}
     client-profile={{ with $value.clientProfile }}{{ . | quote }}{{ end }}
 
@@ -77,8 +77,8 @@ data:
     class-name={{ $value.className | default "http" | quote }}
     interval={{ $value.interval | default 60 }}
     threshold={{ $value.threshold | default 1 }}
-    group-blacklist={{ $value.groupBlacklist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
-    group-whitelist={{ $value.groupWhitelist | default "^.*$" | quote }}
+    group-denylist={{ $value.groupdenylist | default "^.*(console-consumer-|python-kafka-consumer-).*$" | quote }}
+    group-allowlist={{ $value.groupallowlist | default "^.*$" | quote }}
     {{- if $value.extras }}
     extras={{ $value.extras }}
     {{- end }}
