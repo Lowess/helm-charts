@@ -247,3 +247,8 @@ crd:
       default:
         enabled: true
         annotations: {}
+
+storageclass:
+  enabled: true
+  provisioner: efs.csi.aws.com
+  name: efs-sc
