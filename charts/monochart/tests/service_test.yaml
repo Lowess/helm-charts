@@ -7,10 +7,6 @@ release:
   name: my-release
 
 tests:
-  - it: should pass
-    release:
-      name: my-release
-
   - it: assert type
     asserts:
       - hasDocuments:

@@ -33,8 +33,8 @@ spec:
     metadata:
       name: {{ include "common.fullname" . }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/config: {{ include "monochart.configmap.checksum" . }}
+        checksum/secret: {{ include "monochart.secret.checksum" . }}
 {{- if .Values.deployment.pod}}
 {{- with .Values.deployment.pod.annotations }}
 {{ toYaml . | indent 8 }}

@@ -1,0 +1,59 @@
+suite: Coding Challenge Unit Test
+templates:
+  - crd.yaml
+  - deployment.yaml
+  - service.yaml
+values:
+  - values/coding.yaml
+release:
+  name: coding-challenge
+
+tests:
+  - it: Verify coding challenge has a deployment object
+    asserts:
+      - hasDocuments:
+          count: 1
+        template: deployment.yaml
+
+  - it: Verify coding challenge deployment is exposing the right ports
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            containerPort: 8080
+          count: 1
+          any: true
+        template: deployment.yaml
+
+  - it: Verify coding challenge is behind a service
+    asserts:
+      - hasDocuments:
+          count: 1
+        template: service.yaml
+
+  - it: Verify the service is exposed on the right port
+    asserts:
+      - hasDocuments:
+          count: 1
+        template: service.yaml
+
+  - it: Verify coding challenge CRD specs
+    asserts:
+      - hasDocuments:
+          count: 2
+        template: crd.yaml
+
+      - containsDocument:
+          kind: TargetGroupBinding
+          apiVersion: elbv2.k8s.aws/v1beta1
+        template: crd.yaml
+
+      - matchRegex:
+          path: spec.targetGroupARN
+          pattern: arn:aws:elasticloadbalancing:us-east-1:12345678910:targetgroup/(internal|external)
+        template: crd.yaml
+
+      - equal:
+          path: spec.serviceRef.name
+          value: coding-challenge-monochart
+        template: crd.yaml

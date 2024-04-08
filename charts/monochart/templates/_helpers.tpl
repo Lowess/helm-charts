@@ -8,6 +8,20 @@
 {{- end -}}
 
 {{/*
+Compute the ConfigMap SHA 256
+*/}}
+{{- define "monochart.configmap.checksum" -}}
+{{- .Values.configMaps | toString | sha256sum -}}
+{{- end -}}
+
+{{/*
+Compute the Secret SHA 256
+*/}}
+{{- define "monochart.secret.checksum" -}}
+{{- .Values.secrets | toString | sha256sum -}}
+{{- end -}}
+
+{{/*
 Fullname of configMap/secret that contains environment vaiables
 */}}
 {{- define "monochart.env.fullname" -}}

@@ -12,7 +12,7 @@
 └── 🌀 Namespace: {{ include "colorize" (list "green" .Release.Namespace) }}
 └── 🚀 Release:   {{ include "colorize" (list "yellow" .Release.Name) }}
 └── 🐳 Container: {{ print (include "colorize" (list "gray" .Values.image.repository)) ":" (include "colorize" (list "purple" .Values.image.tag)) }}
-└── 🌐 URL:       {{ include "colorize" (list "cyan" (print "https://" $appUrl)) }}
+└── 🌐 URL:       {{ include "colorize" (list "cyan" ((eq $appUrl "-") | ternary $appUrl (print "https://" $appUrl))) }}
 ------------------------------------
 
 {{- $nested := list "configMaps" "secrets" "service" "ingress" "crd" }}
