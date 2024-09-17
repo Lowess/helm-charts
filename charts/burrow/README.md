@@ -75,13 +75,13 @@ Parameter | Description | Default
 `burrow.config.consumer.<myclustername>.clusterName` | If `burrow.config.cluster.<myclustername>.clusterName` is set then this setting must be set to the same value |
 `burrow.config.consumer.<myclustername>.className` | This is the name of the cluster module type. The available classes are: `kafka` or `kafka_zk` | `kafka`
 `burrow.config.consumer.<myclustername>.servers` | A list of strings in the form "hostname:port" that point to the servers in the Kafka cluster. At least one is required |
-`burrow.config.consumer.<myclustername>.groupWhitelist` | If specified, only send offsets for groups that match this regular expression | `.*`
-`burrow.config.consumer.<myclustername>.groupBlacklist` | If specified, only send offsets for groups that DO NOT match this regular expression. This is processed after the whitelist (if specified) | `^.*(console-consumer-|python-kafka-consumer-).*`
+`burrow.config.consumer.<myclustername>.groupAllowlist` | If specified, only send offsets for groups that match this regular expression | `.*`
+`burrow.config.consumer.<myclustername>.groupDenylist` | If specified, only send offsets for groups that DO NOT match this regular expression. This is processed after the whitelist (if specified) | `^.*(console-consumer-|python-kafka-consumer-).*`
 `burrow.config.notifier.<mynotifier>.className` | This is the name of the cluster module type. The available classes are: `http` or `email` | `http`
 `burrow.config.notifier.<mynotifier>.interval` | The number of seconds to wait between sending notifications for a single group | `60`
 `burrow.config.notifier.<mynotifier>.threshold` | The minimum group status to send out notifications for (refer to [StatusConstant](https://godoc.org/github.com/linkedin/Burrow/core/protocol#StatusConstant) for values). | `1`
-`burrow.config.notifier.<mynotifier>.groupBlacklist` | If specified, only send notifications for groups that DO NOT match this regular expression. This is processed after the whitelist (if specified) | `^.*(console-consumer-|python-kafka-consumer-).*$`
-`burrow.config.notifier.<mynotifier>.groupWhitelist` | If specified, only send notifications for groups that match this regular expression | `^.*$`
+`burrow.config.notifier.<mynotifier>.groupDenylist` | If specified, only send notifications for groups that DO NOT match this regular expression. This is processed after the whitelist (if specified) | `^.*(console-consumer-|python-kafka-consumer-).*$`
+`burrow.config.notifier.<mynotifier>.groupAllowlist` | If specified, only send notifications for groups that match this regular expression | `^.*$`
 `burrow.config.notifier.<mynotifier>.extras` | A string representation of a JSON object that will be available when compiling the template for the message to send | `'{}'`
 `burrow.config.notifier.<mynotifier>.sendClose` | If `true`, use the template-close template to send a notification when the group status drops to OK (after it has been WARN or above) | `true`
 `burrow.config.notifier.<mynotifier>.urlOpen` | The URL to make a request to for groups that meet the threshold |
