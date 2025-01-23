@@ -118,6 +118,20 @@ deployment:
                 values:
                   - "postgresql"
           topologyKey: "kubernetes.io/hostname"
+    # podAntiAffinity to deploy one pod per node (Example for squid)
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              release: squid-proxy  
+          topologyKey: "kubernetes.io/hostname"
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                release: squid-proxy  # Match pods with this label
+            topologyKey: "kubernetes.io/hostname"  # Spread pods across nodes             
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
