@@ -71,13 +71,10 @@ spec:
 {{- if .Values.deployment.affinity }}
       affinity:
 {{- if or .Values.deployment.affinity.podAntiAffinity (eq .Values.deployment.affinity.affinityRule "ShouldBeOnDifferentNode") }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
+        podAntiAffinity:        
 {{- if .Values.deployment.affinity.podAntiAffinity }}
-{{- if .Values.deployment.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
-{{- with .Values.deployment.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
+{{- with .Values.deployment.affinity.podAntiAffinity }}
 {{ toYaml . | indent 10 }}
-{{- end }}
 {{- end }}
 {{- end }}
 {{- if eq .Values.deployment.affinity.affinityRule "ShouldBeOnDifferentNode" }}
