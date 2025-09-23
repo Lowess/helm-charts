@@ -1,0 +1,16 @@
+{{- if .Values.repoConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "atlantis.fullname" . }}-repo-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "atlantis.labels" . | nindent 4 }}
+  {{- with .Values.extraAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  repos.yaml: |
+    {{- .Values.repoConfig | nindent 4 }}
+{{- end }}
