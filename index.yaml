@@ -10,6 +10,29 @@ entries:
     urls:
     - https://github.com/Lowess/helm-charts/releases/download/app-0.1.0/app-0.1.0.tgz
     version: 0.1.0
+  atlantis:
+  - apiVersion: v1
+    appVersion: v0.35.1
+    created: "2025-09-23T09:34:49.654662+02:00"
+    description: A Helm chart for Atlantis https://www.runatlantis.io
+    digest: f2265b7730a013a9a95bef041c4f084c1e50db591c247103957b4ca5fd9b6187
+    home: https://www.runatlantis.io
+    icon: https://www.runatlantis.io/hero.png
+    keywords:
+    - terraform
+    maintainers:
+    - name: lkysow
+    - name: jamengual
+    - name: chenrui333
+    - name: nitrocode
+    - name: genpage
+    - name: gmartinez-sisti
+    name: atlantis
+    sources:
+    - https://github.com/runatlantis/atlantis
+    urls:
+    - https://github.com/Lowess/helm-charts/releases/download/atlantis-5.18.3-rc.1/atlantis-5.18.3-rc.1.tgz
+    version: 5.18.3-rc.1
   burrow:
   - apiVersion: v1
     appVersion: 1.3.3
@@ -599,4 +622,4 @@ entries:
     urls:
     - https://github.com/Lowess/helm-charts/releases/download/zoonavigator-0.1.0/zoonavigator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-01-24T10:26:10.939028+01:00"
+generated: "2025-09-23T09:34:49.654789+02:00"
