@@ -71,7 +71,7 @@ spec:
 {{- if .Values.deployment.affinity }}
       affinity:
 {{- if or .Values.deployment.affinity.podAntiAffinity (eq .Values.deployment.affinity.affinityRule "ShouldBeOnDifferentNode") }}
-        podAntiAffinity:        
+        podAntiAffinity:
 {{- if .Values.deployment.affinity.podAntiAffinity }}
 {{- with .Values.deployment.affinity.podAntiAffinity }}
 {{ toYaml . | indent 10 }}
@@ -195,8 +195,6 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "common.fullname" .) }}
       {{- end }}
-      {{- else }}
-        emptyDir: {}
       {{- end }}
       {{- end }}
       {{- end }}
